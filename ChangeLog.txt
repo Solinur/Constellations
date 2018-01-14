@@ -1,0 +1,35 @@
+0.3.2 139 (21.06.2017, 23:48)
+[*]Fixed an error that happened when one type of damage was 0
+
+0.3.3 561 (27.06.2017, 21:11)
+[*]Fixed an error in the calculation Formula. In some cases this might change the result quite a bit.
+[*]Fixed messed up labels after Import
+[*]Updated Ability DB
+[*]Added French Translation done by Llwydd - Thanks!
+
+0.3.4 1,333 (27.06.2017, 21:11)
+[*]Fixed an error that appeared when setting Min and Max for a CP to the same value.
+[*]Added data for a bunch of monster sets
+
+0.3.5 2,316 (29.07.2017, 21:03)
+[*]Fixed a bug that could cause incorrect calculations (including the suggestion to set CP not at jump points)
+
+0.3.6 3,286 (13.08.2017) 20:40
+[*]API Bump to Horns of the Reach (100020)
+[*]Fixed some leaked global variables. 
+[*]Added a bunch of Destro Staff abilities of lower ranks (thanks to catch22atplay)
+
+0.3.7 5,323 (21.09.2017) 21:50
+[*]Added Endless Fury Explosion
+
+0.3.8 8,187 (19.11.2017) 00:31
+[*]API Bump to Clockwork City (100021)
+[*]Added a few abilities
+[*]Fixed properties for Twisting Path
+
+0.3.9 11.449 (01.05.2018) 19:35
+[*]Updated LibAddonMenu to version 2.0 r25 to fix an issue
+
+0.4.0
+[*]Updated Libraries
+[*]Added Crit Damage Done and Penetration to the values retrieved from Combat Metrics on Import.
