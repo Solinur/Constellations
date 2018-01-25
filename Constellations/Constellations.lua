@@ -742,6 +742,7 @@ local AbilityData = {
 	[89716] = {true, false, false, true}, --Power of the Light (1st)
 	[27594] = {false, false, false, false}, --Power of the Light (2nd)
 	[27209] = {false, true, false, true}, --Puncturing Sweep
+	[44439] = {false, true, false, true}, --Puncturing Sweep (new in 3.3.)
 	[89684] = {true, false, false, true}, --Purifying Light (1st)
 	[27565] = {false, false, false, false}, --Purifying Light (2nd)
 	[62604] = {false, true, false, true}, --Radial Sweep (dot)
