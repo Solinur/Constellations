@@ -7,7 +7,7 @@ local dx = 1/GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE) --Get UI Scale
 Constellations = Constellations or {}
 local CST = Constellations
 CST.name 		= "Constellations"
-CST.version 	= "0.3.9"
+CST.version 	= "0.4.0"
 CST.debug = true
 
 local function Print(message, ...)
@@ -436,9 +436,6 @@ local AFFECTED_BY_MASTEROFARMS = 2
 local AFFECTED_BY_THAUMATURGE = 3
 local AFFECTED_BY_WEAPONEXPERT = 4
 local AFFECTED_BY_CRITS = 5
-
--- isAffectedby = {Master-at-Arms, Thaumaturge, Staff/Weapon Expert, Elfborn/Precise Strikes}  (only pet skills or skills that can't crit are not affected by elfborn)
--- list is at https://docs.google.com/spreadsheets/d/1k9aDTz-kv-zrnUmAkVnX3bHQbF-QTdAhDtsfbu8zJkA/edit?usp=sharing
 
 local AbilityData = GetConstellationData()
 

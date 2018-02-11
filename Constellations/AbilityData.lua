@@ -1,3 +1,6 @@
+-- isAffectedby = {Master-at-Arms, Thaumaturge, Staff/Weapon Expert, Elfborn/Precise Strikes}  (only pet skills or skills that can't crit are not affected by elfborn)
+-- list is at https://docs.google.com/spreadsheets/d/1k9aDTz-kv-zrnUmAkVnX3bHQbF-QTdAhDtsfbu8zJkA/edit?usp=sharing
+
 local AbilityData = {
 	[46431] = {false, true, false, true}, --Anti-Calvary Caltrops
 	[63295] = {false, false, false, true}, --Inevitable Detonation
@@ -212,6 +215,7 @@ local AbilityData = {
 	[61273] = {true, false, false, false}, --Valkyn Skoria (splash)
 	[59596] = {true, false, false, false}, --Valkyn Skoria (target hit)
 	[80490] = {true, false, false, false}, --Velidreth
+	[102136] = {false, true, false, false}, --Zaan	
 	[43036] = {false, true, false, true}, --Degeneration
 	[63469] = {true, false, false, true}, --Ice Comet
 	[63466] = {false, true, false, true}, --Ice Comet dot

@@ -1,7 +1,7 @@
 ﻿## Title: Constellations
 ## APIVersion: 100021 100022
 ## Author: Solinur/decay
-## Version: 0.3.9
+## Version: 0.4.0
 ## DependsOn:
 ## OptionalDependsOn: LibAddonMenu-2.0 CombatMetrics
 ## SavedVariables: Constellations_Save

@@ -27,9 +27,13 @@
 [*]Added a few abilities
 [*]Fixed properties for Twisting Path
 
-0.3.9 11.449 (01.05.2018) 19:35
+0.3.9 11.449 (05.01.2018) 19:35
 [*]Updated LibAddonMenu to version 2.0 r25 to fix an issue
 
+0.3.10 15,324 (12.02.2018) 19:35
+[*]Added new Abilitiy IDs for Puncturing Sweeps and Biting Jabs. Those were introduced due to the refactoring of those abilities by ZOS.
+[*]Added Zaan set proc. 
+[*]Added some low rank abilities.
+
 0.4.0
-[*]Updated Libraries
 [*]Added Crit Damage Done and Penetration to the values retrieved from Combat Metrics on Import.
