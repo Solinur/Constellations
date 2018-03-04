@@ -473,9 +473,64 @@ local function ImportCMXData()
 	local calcstats = fight.calculated.stats.dmgavg
 	
 	local spellCritRatio = GetCriticalStrikeChance(calcstats.avgspellcrit, true) / 100
-	local weaponCritRatio = GetCriticalStrikeChance(calcstats.avgweaponcrit, true) / 100
 	local spellCritBonus = calcstats.avgspellcritbonus
+	local spellPenetration = calcstats.avgspellpen
+	local spellPenData = selection.spellResistance
+	
+	local weaponCritRatio = GetCriticalStrikeChance(calcstats.avgweaponcrit, true) / 100
 	local weaponCritBonus = calcstats.avgweaponcritbonus
+	local weaponPenetration = calcstats.avgweaponpen
+	local weaponPenData = selection.physicalResistance
+	
+	local totalSpellDamage = 0
+	local totalWeaponDamage = 0
+	local avgSpellPen = 0
+	local avgWeaponPen = 0
+	
+	-- Calculate Average Spell
+	
+	if spellPenData then 
+	
+		for _, damage in pairs(spellPenData) do
+		
+			totalSpellDamage = totalSpellDamage + damage
+			
+		end
+		
+		for spellPenetration, damage in pairs(spellPenData) do
+		
+			avgSpellPen = avgSpellPen + (spellPenetration * damage / totalSpellDamage)
+			
+		end
+		
+	else
+	
+		avgSpellPen = 18200
+		
+	end
+	
+	if weaponPenData then 
+	
+		for _, damage in pairs(weaponPenData) do
+		
+			totalWeaponDamage = totalWeaponDamage + damage
+			
+		end
+		
+		for weaponPenetration, damage in pairs(weaponPenData) do
+		
+			avgWeaponPen = avgWeaponPen + (weaponPenetration * damage / totalWeaponDamage)
+			
+		end	
+		
+	else
+	
+		avgWeaponPen = 18200
+		
+	end
+	
+	avgSpellPen = math.max(avgSpellPen, spellPenetration)
+	avgWeaponPen = math.max(avgWeaponPen, weaponPenetration)
 	
 	local spellCrits = 0
 	local spellCritDamage = 0
@@ -486,6 +541,7 @@ local function ImportCMXData()
 	local weaponCritDamage = 0
 	local weaponHits = 0
 	local weaponDamageTotal = 0
+	
 	
 	for id, ability in pairs(selection.damageOut) do
 		
@@ -561,7 +617,7 @@ local function ImportCMXData()
 	local weaponCritDamageRatio = weaponCritDamage / math.max(weaponDamageTotal,1)
 	weaponCritBonus = weaponCritBonus or (weaponCritRatio > 0 and weaponCritDamageRatio > 0 and 100 * weaponCritDamageRatio * (1 - weaponCritRatio)/((1 - weaponCritDamageRatio) * weaponCritRatio) - 1 or 0) * 100
 	
-	local stats = {CPdefault, 20, spellCritRatio*100, spellCritBonus, nil, weaponCritRatio*100, weaponCritBonus, nil}
+	local stats = {CPdefault, 20, spellCritRatio*100, spellCritBonus, avgSpellPen, weaponCritRatio*100, weaponCritBonus, avgWeaponPen}
 	
 	SetStats(stats)
 	
