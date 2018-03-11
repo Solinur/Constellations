@@ -228,6 +228,7 @@
 										self.color = SI_CONSTELLATIONS_COLOR_MAGICKA
 										self.minmax = {0, 25000, 1}
 										self.id = 5
+										Constellations.SPenBox = self
 									</OnInitialized>
 								</Control>
 								
@@ -254,6 +255,7 @@
 										self.color = SI_CONSTELLATIONS_COLOR_STAMINA
 										self.minmax = {0, 25000, 1}
 										self.id = 8
+										Constellations.WPenBox = self
 									</OnInitialized>
 								</Control>
 								
@@ -398,16 +400,23 @@
 						</Line>
 						
 						<Control name="Constellations_Import" resizeToFitDescendents="true"> <!--resizeToFitDescendents="true"!-->
-							<ResizeToFitPadding width="6" height="8"/>
+							<ResizeToFitPadding width="6" height="4"/>
 							<Anchor point="TOPLEFT" relativeTo="Constellations_Separator1" relativePoint="BOTTOMLEFT" offsetY="12"/>
 							<Anchor point="TOPRIGHT" relativeTo="Constellations_Separator1" relativePoint="BOTTOMRIGHT" offsetY="12"/>
 							
 							<Controls>
 								<Button name="$(parent)ImportButton" text="SI_CONSTELLATIONS_BUTTON_IMPORT_TEXT" verticalAlignment="CENTER" horizontalAlignment="CENTER" mouseEnabled="true" pixelRoundingEnabled="true" font="Constellations_HeaderFont" inherits="ZO_DefaultButton">
-									<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="Constellations_Separator1" offsetY="8" constrains="Y"/>
-									<Anchor point="CENTER" relativePoint="CENTER" constrains="X"/>
-									<Dimensions x="250"/>
+									<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="Constellations_Separator1" offsetY="8"/>
+									<Anchor point="RIGHT" relativePoint="CENTER" offsetX="-4" constrains="X"/>
 									<OnMouseUp> Constellations.Import() </OnMouseUp>
+								</Button>
+								
+								<Button name="$(parent)ResetButton" text="SI_CONSTELLATIONS_BUTTON_RESET_TEXT" verticalAlignment="CENTER" horizontalAlignment="CENTER" mouseEnabled="true" pixelRoundingEnabled="true" font="Constellations_HeaderFont" inherits="ZO_DefaultButton">
+									<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="Constellations_Separator1" offsetY="8"/>
+									<Anchor point="LEFT" relativePoint="CENTER" offsetX="4" constrains="X"/>
+									<ButtonState state="DISABLED"/>
+									<OnMouseUp> Constellations.Reset(self) </OnMouseUp>
+									<OnInitialized> Constellations.ResetButton = self</OnInitialized>
 								</Button>
 								
 							</Controls>

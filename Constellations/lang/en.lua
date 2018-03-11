@@ -8,6 +8,7 @@ ZO_CreateStringId("SI_CONSTELLATIONS_COLOR_STAMINA", "FFCCFFCC")
 ZO_CreateStringId("SI_CONSTELLATIONS_COLOR_HEALTH", "FFFFCCCC")
 
 ZO_CreateStringId("SI_CONSTELLATIONS_BUTTON_IMPORT_TEXT", "Combat Metrics Import")
+ZO_CreateStringId("SI_CONSTELLATIONS_BUTTON_RESET_TEXT", "Reset Penetration")
 ZO_CreateStringId("SI_CONSTELLATIONS_BUTTON_CALCULATE_TEXT", "Calculate")
 
 ZO_CreateStringId("SI_CONSTELLATIONS_RATIOBUTTON_TT", "Damage Stats and Ratios")
@@ -51,5 +52,7 @@ ZO_CreateStringId("SI_CONSTELLATIONS_INPUT_RATIOS_LABEL_TOOLTIP9", "All light an
 ZO_CreateStringId("SI_CONSTELLATIONS_INPUT_RATIOS_LABEL10", "Physical Critable Damage") 
 ZO_CreateStringId("SI_CONSTELLATIONS_INPUT_RATIOS_LABEL_TOOLTIP10", "All physical damage that can crit and that isn't pet damage") 
 
+ZO_CreateStringId("SI_CONSTELLATIONS_INPUT_LABEL_SPELLPEN_TOOLTIP", "Penetration distribution from Combat Metrics Import is active. Changing this value will only offset the distribution. To reset use the \"Reset Penetration\" button below") 
+ZO_CreateStringId("SI_CONSTELLATIONS_INPUT_LABEL_WEAPONPEN_TOOLTIP", "Penetration distribution from Combat Metrics Import is active. Changing this value will only offset the distribution. To reset use the \"Reset Penetration\" button below") 
 
 ZO_CreateStringId("SI_CONSTELLATIONS_INPUT_TARGET_LABEL1", "Spell/Weapon Resistance") 

@@ -266,6 +266,29 @@ local function SetPenData(spellPenData, weaponPenData, avgPen)
 	end
 end
 
+function CST.Reset(button)
+
+	SetPenData()
+	
+	button:SetState(BSTATE_DISABLED)
+	
+	local spenctl = CST.SPenBox
+	local spenvalue = spenctl:GetNamedChild("Value")
+	local wpenctl = CST.WPenBox
+	local wpenvalue = wpenctl:GetNamedChild("Value")
+	
+	spenvalue.data.tooltipText = nil
+	spenvalue.data.tooltipText = nil
+	wpenvalue.data.tooltipText = nil
+	
+	local colors = ZO_ColorDef:New(GetString(spenctl.color))
+	local colorw = ZO_ColorDef:New(GetString(wpenctl.color))
+			
+	spenvalue:SetColor(colors.r, colors.g, colors.b, colors.a)
+	wpenvalue:SetColor(colorw.r, colorw.g, colorw.b, colorw.a)
+
+end
+
 local function GetCurrentRatios()
 
 	local ratios = {}
@@ -512,16 +535,29 @@ local IsMagickaAbility = {
 
 local function ImportCMXData()
 
+	local fightData
+
 	if CMX == nil or CMX.GetAbilityStats == nil then 
 	
 		Print("To import data you need to install/update Combat Metrics!") 
 		return 
 		
-	end
-
-	local fightData = CMX.GetAbilityStats()
+	else
 	
-	if fightData == nil then return end 
+		fightData, version = CMX.GetAbilityStats()
+		
+		if version < 2
+		
+			Print("To import data you need to update Combat Metrics!") 
+			return 
+		
+		elseif fightData == nil then 
+		
+			return 
+		
+		end 
+		
+	end
 	
 	local fight = fightData[1]
 	
@@ -706,6 +742,30 @@ local function ImportCMXData()
 	
 	CST.ApplyCurrentStars = true
 	CST.ApplyCurrentStarsCheckBox:SetHidden(false)
+	
+	-- Indicate special penetration data
+	
+	CST.ResetButton:SetState(BSTATE_ENABLED)
+	
+	local spenvalue = CST.SPenBox:GetNamedChild("Value")
+	local wpenvalue = CST.WPenBox:GetNamedChild("Value")
+	
+	spenvalue.data = {tooltipText = GetString(SI_CONSTELLATIONS_INPUT_LABEL_SPELLPEN_TOOLTIP)}
+	wpenvalue.data = {tooltipText = GetString(SI_CONSTELLATIONS_INPUT_LABEL_SPELLPEN_TOOLTIP)}
+	
+	if spenvalue:GetHandler("OnMouseEnter") == nil then 
+	
+		spenvalue:SetHandler("OnMouseEnter", ZO_Options_OnMouseEnter)
+		spenvalue:SetHandler("OnMouseExit", ZO_Options_OnMouseExit)
+		
+		wpenvalue:SetHandler("OnMouseEnter", ZO_Options_OnMouseEnter)
+		wpenvalue:SetHandler("OnMouseExit", ZO_Options_OnMouseExit)
+		
+	end
+	
+	spenvalue:SetColor(1, .5, 0, 1)	
+	wpenvalue:SetColor(1, .5, 0, 1)
+	
 end
 
 CST.Import = ImportCMXData
