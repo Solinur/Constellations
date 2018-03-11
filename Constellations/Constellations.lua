@@ -2,6 +2,7 @@ local em = GetEventManager()
 local _
 local db
 local dx = 1/GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE) --Get UI Scale to draw thin lines correctly
+local pendata
 
 -- Addon Namespace
 Constellations = Constellations or {}
@@ -21,7 +22,9 @@ local spellcrit = GetCriticalStrikeChance(GetPlayerStat(STAT_SPELL_CRITICAL, STA
 local weaponcrit = GetCriticalStrikeChance(GetPlayerStat(STAT_CRITICAL_STRIKE, STAT_BONUS_OPTION_APPLY_BONUS, STAT_SOFT_CAP_OPTION_DONT_APPLY_SOFT_CAP), true)
 local CPdefault = math.min(GetNumSpentChampionPoints(ATTRIBUTE_MAGICKA) + GetNumUnspentChampionPoints(ATTRIBUTE_MAGICKA), GetMaxSpendableChampionPointsInAttribute())
 
-local sliderDefaults = {{CPdefault, 20, spellcrit, 50, 18200, weaponcrit, 50, 18200}, {100, 50, 40, 10, 100, 0, 0, 0, 0, 0, 0}, {18200}}
+local CST_DEFAULT_RESIST = 18200
+
+local sliderDefaults = {{CPdefault, 20, spellcrit, 50, CST_DEFAULT_RESIST, weaponcrit, 50, CST_DEFAULT_RESIST}, {100, 50, 40, 10, 100, 0, 0, 0, 0, 0, 0}, {CST_DEFAULT_RESIST}}
 --local sliderDefaults = {{ratios, 0, 58, 50, 10144, 58, 50, 10144}, {100, 60, 40, 10, 100, 0, 0, 0, 0, 0, 0}, {18200}}
 
 local CategoryStrings = {
@@ -53,7 +56,7 @@ function CST.InitializeInputSliders(control, category)
 		
 		local child = control:GetChild(k)
 		
-		if child:GetType() == 0 then 
+		if child:GetType() == CT_CONTROL then 
 		
 			local i = child.id
 		
@@ -104,7 +107,7 @@ function Constellations.InitializeStarRows(control)
 		local discipline = child.discipline
 		local colors = ZO_ColorDef:New(GetString(child.color))
 		
-		if child:GetType() == 0 and discipline ~= nil and skillId ~= nil then 
+		if child:GetType() == CT_CONTROL and discipline ~= nil and skillId ~= nil then 
 			
 			local label = child:GetNamedChild("Label")
 			
@@ -121,7 +124,7 @@ function Constellations.InitializeStarRows(control)
 			value:SetText(string.format("%d", points))
 			value:SetColor(colors.r, colors.g, colors.b, colors.a)
 			
-		elseif child:GetType() == 1 and discipline ~= nil then
+		elseif child:GetType() == CT_LABEL and discipline ~= nil then
 		
 			child:SetText(zo_strformat(SI_CHAMPION_CONSTELLATION_NAME_FORMAT, GetChampionDisciplineName(discipline)))
 		
@@ -171,7 +174,7 @@ local function SetNewStarValues(CPValues)
 		local child = resultRows:GetChild(i)
 		local abilityId = child.abilityId
 		
-		if child:GetType() == 0 and abilityId ~= nil then 
+		if child:GetType() == CT_CONTROL and abilityId ~= nil then 
 			
 			local newvalue = child:GetNamedChild("Value2")
 			newvalue:SetText(tostring(CPValues[abilityId]))
@@ -180,16 +183,35 @@ local function SetNewStarValues(CPValues)
 	end
 end
 
+function CST.SetBoxValue(self)
+
+	local text = self:GetText()
+	local cleantext = text:sub(string.find(text, "%d+[,%.]?%d*")):gsub(",","%.")	-- make sure number conversion works
+
+	local value = tonumber(cleantext)
+	
+	local slider = self:GetParent():GetNamedChild("Slider")
+	
+	local min, max = slider:GetMinMax()
+	local form = max > 150 and "%.0f" or "%.1f%%"
+	
+	self:SetText(string.format(form, value))
+	slider:SetValue(value)
+	
+end
+
 function CST.SetSliderValue(self, value)
 	
 	local valueControl = self:GetParent():GetNamedChild("Value")
 	
 	local min, max = self:GetMinMax()
-	local form = max > 150 and "%.0f " or "%.1f%%"
+	local form = max > 150 and "%.0f" or "%.1f%%"
 	
 	valueControl:SetText(string.format(form, value))
 	
 end
+
+
 
 function CST.ApplyCurrentStarsButton(control)
 
@@ -213,7 +235,7 @@ local function GetCurrentStats()
 		local slider = child:GetNamedChild("Slider")
 		local id = child.id
 		
-		if child:GetType() == 0 and id then stats[id] = zo_roundToNearest(slider:GetValue(), 0.1) end
+		if child:GetType() == CT_CONTROL and id then stats[id] = zo_roundToNearest(slider:GetValue(), 0.1) end
 	end
 	
 	return stats
@@ -227,7 +249,20 @@ local function SetStats(stats)
 		local slider = child:GetNamedChild("Slider")
 		local id = child.id
 		
-		if child:GetType() == 0 and id and stats[id] then slider:SetValue(zo_roundToNearest(stats[id], 0.1)) end
+		if child:GetType() == CT_CONTROL and id and stats[id] then slider:SetValue(zo_roundToNearest(stats[id], 0.1)) end
+	end
+end
+
+local function SetPenData(spellPenData, weaponPenData, avgPen)
+
+	if spellPenData ~= nil and weaponPenData ~= nil then 
+	
+		pendata = {spellPenData, weaponPenData, avgPen}
+		
+	else
+	
+		pendata = {}
+		
 	end
 end
 
@@ -241,7 +276,7 @@ local function GetCurrentRatios()
 		local slider = child:GetNamedChild("Slider")
 		local id = child.id
 		
-		if child:GetType() == 0 and id then ratios[id] = zo_roundToNearest(slider:GetValue(), 0.1) end
+		if child:GetType() == CT_CONTROL and id then ratios[id] = zo_roundToNearest(slider:GetValue(), 0.1) end
 	end
 	
 	return ratios
@@ -255,7 +290,7 @@ local function SetRatios(ratios)
 		local slider = child:GetNamedChild("Slider")
 		local id = child.id
 		
-		if child:GetType() == 0 and id and ratios[id] then slider:SetValue(zo_roundToNearest(ratios[id], 0.1)) end
+		if child:GetType() == CT_CONTROL and id and ratios[id] then slider:SetValue(zo_roundToNearest(ratios[id], 0.1)) end
 	end
 
 end
@@ -270,7 +305,7 @@ local function GetCurrentTargetStats()
 		local slider = child:GetNamedChild("Slider")
 		local id = child.id
 		
-		if child:GetType() == 0 and id then targetStats[id] = zo_roundToNearest(slider:GetValue(), 0.1) end
+		if child:GetType() == CT_CONTROL and id then targetStats[id] = zo_roundToNearest(slider:GetValue(), 0.1) end
 	end
 	
 	return targetStats
@@ -284,7 +319,7 @@ local function UpdateCP(newCP)
 		local skillId = child.skillId
 		local discipline = child.discipline
 		
-		if child:GetType() == 0 and discipline ~= nil and skillId ~= nil then 
+		if child:GetType() == CT_CONTROL and discipline ~= nil and skillId ~= nil then 
 			
 			local label = child:GetNamedChild("Label")
 			
@@ -313,7 +348,7 @@ local function GetCurrentCP()
 		local child = resultRows:GetChild(i)
 		local abilityId = child.abilityId
 		
-		if child:GetType() == 0 and abilityId ~= nil then 
+		if child:GetType() == CT_CONTROL and abilityId ~= nil then 
 			
 			local control = child:GetNamedChild("Value")
 			local value = tonumber(control:GetText())
@@ -417,8 +452,34 @@ local function GetDamageFactor(stats, ratios, targetStats, CP, round)
 	local spellCritMod = 1 + ratios[5]/100 * stats[3]/100 * (stats[4]/100 + cpfactors[61680])
 	local weaponCritMod = 1 + ratios[10]/100 * stats[6]/100 * (stats[7]/100 + cpfactors[59105])
 	
-	local spellPenMod = (1 - math.max(targetStats[1] - stats[5] - cpfactors[61555],0) / 50000)
-	local weaponPenMod = (1 - math.max(targetStats[1] - stats[8] - cpfactors[61546],0) / 50000)
+	local spellPenMod = 0
+	local weaponPenMod = 0
+	
+	if #pendata > 0 then
+	
+		spellPenData, weaponPenData, avgPen = unpack(pendata)
+	
+		spellPenAvgDiff = avgPen[1] - (stats[5] + cpfactors[61555])
+		weaponPenAvgDiff = avgPen[2] - (stats[8] + cpfactors[61546])
+	
+		for spellPen, damageFrac in pairs(spellPenData) do
+		
+			spellPenMod = spellPenMod + (1 - math.max(targetStats[1] - (spellPen - spellPenAvgDiff),0) / 50000) * damageFrac
+			
+		end
+	
+		for weaponPen, damageFrac in pairs(weaponPenData) do
+		
+			weaponPenMod = weaponPenMod + (1 - math.max(targetStats[1] - (weaponPen - weaponPenAvgDiff),0) / 50000) * damageFrac
+			
+		end
+		
+	else
+	
+		spellPenMod = (1 - math.max(targetStats[1] - stats[5] - cpfactors[61555],0) / 50000)
+		weaponPenMod = (1 - math.max(targetStats[1] - stats[8] - cpfactors[61546],0) / 50000)
+
+	end	
 	
 	local totalspellmod = ratios[1]/100 * spellCPMod * spellCritMod * spellPenMod
 	local totalweaponmod = ratios[6]/100 * weaponCPMod * weaponCritMod * weaponPenMod
@@ -497,15 +558,25 @@ local function ImportCMXData()
 			
 		end
 		
-		for spellPenetration, damage in pairs(spellPenData) do
+		if totalSpellDamage > 0 then 
 		
-			avgSpellPen = avgSpellPen + (spellPenetration * damage / totalSpellDamage)
+			for spellPenetration, damage in pairs(spellPenData) do
 			
+				avgSpellPen = avgSpellPen + (spellPenetration * damage / totalSpellDamage)
+				spellPenData[spellPenetration] = damage / totalSpellDamage
+				
+			end
+			
+		else 
+		
+			avgSpellPen = spellPenetration
+			spellPenData = { [avgSpellPen] = 1 }
+		
 		end
 		
 	else
 	
-		avgSpellPen = 18200
+		avgSpellPen = CST_DEFAULT_RESIST
 		
 	end
 	
@@ -517,20 +588,29 @@ local function ImportCMXData()
 			
 		end
 		
-		for weaponPenetration, damage in pairs(weaponPenData) do
+		if totalWeaponDamage > 0 then
 		
-			avgWeaponPen = avgWeaponPen + (weaponPenetration * damage / totalWeaponDamage)
+			for weaponPenetration, damage in pairs(weaponPenData) do
 			
-		end	
+				avgWeaponPen = avgWeaponPen + (weaponPenetration * damage / totalWeaponDamage)
+				weaponPenData[weaponPenetration] = damage / totalWeaponDamage
+				
+			end	
+		
+		else 
+		
+			avgWeaponPen = weaponPenetration
+			weaponPenData = { [avgWeaponPen] = 1 }
+			
+		end
 		
 	else
 	
-		avgWeaponPen = 18200
+		avgWeaponPen = CST_DEFAULT_RESIST
 		
 	end
 	
-	avgSpellPen = math.max(avgSpellPen, spellPenetration)
-	avgWeaponPen = math.max(avgWeaponPen, weaponPenetration)
+	local avgPen = {avgSpellPen, avgWeaponPen}
 	
 	local spellCrits = 0
 	local spellCritDamage = 0
@@ -620,6 +700,7 @@ local function ImportCMXData()
 	local stats = {CPdefault, 20, spellCritRatio*100, spellCritBonus, avgSpellPen, weaponCritRatio*100, weaponCritBonus, avgWeaponPen}
 	
 	SetStats(stats)
+	SetPenData(spellPenData, weaponPenData, avgPen)
 	
 	UpdateCP(fight.CP)
 	

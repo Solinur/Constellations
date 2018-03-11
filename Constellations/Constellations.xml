@@ -3,6 +3,13 @@
 	<Font name="Constellations_HeaderFont" font="$(BOLD_FONT)|$(KB_18)|soft-shadow-thin" />
 	<Font name="Constellations_OptionFont" font="$(MEDIUM_FONT)|$(KB_18)|soft-shadow-thin" />
 	<Controls>
+		<EditBox name="Constellations_InputBox" virtual="true"> 
+			<Controls>
+				<Backdrop name="$(parent)_Bg" centerColor="FF333333" edgeColor="00000000">
+					<AnchorFill/>
+				</Backdrop>
+			</Controls>
+		</EditBox> 
 		
 		<Control name="Constellations_InputSlider" virtual="true" mouseEnabled="true"> 
 			<Dimensions x="436" y="22" />
@@ -21,10 +28,17 @@
 					</OnValueChanged>
 				</Slider>
 				
-				<Label name="$(parent)Value" verticalAlignment="1" horizontalAlignment="2" text="0.0%" color="FFFFFFFF" font="Constellations_OptionFont">
+				<EditBox name="$(parent)Value" verticalAlignment="1" horizontalAlignment="2" text="0.0%" color="FFFFFFFF" font="Constellations_OptionFont" inherits="ZO_DefaultEdit Constellations_InputBox">
 					<Anchor point="LEFT" relativeTo="$(parent)Slider" relativePoint="RIGHT"  offsetX="8"/>
-					<Dimensions x="60" y="22" />
-				</Label>
+					<Dimensions x="60" y="22" />					
+					<OnFocusLost>
+						Constellations.SetBoxValue(self)
+					</OnFocusLost>
+					<OnInitialized>
+						self:SetText(tostring(0))
+						Constellations.SetBoxValue(self)
+					</OnInitialized>
+				</EditBox>
 				
 			</Controls>
 			<OnMouseWheel>
@@ -41,14 +55,9 @@
 					<Dimensions x="218" y="22" />
 				</Label>
 				
-				<EditBox name="$(parent)Value" verticalAlignment="1" horizontalAlignment="2" text="0" color="FFFFFFFF" font="Constellations_OptionFont" inherits="ZO_DefaultEdit" textType="TEXT_TYPE_NUMERIC">
+				<EditBox name="$(parent)Value" verticalAlignment="1" horizontalAlignment="2" text="0" color="FFFFFFFF" font="Constellations_OptionFont" inherits="ZO_DefaultEdit Constellations_InputBox" textType="TEXT_TYPE_NUMERIC">
 					<Anchor point="LEFT" relativeTo="$(parent)Label" relativePoint="RIGHT"  offsetX="10"/>
 					<Dimensions x="32" y="22" />
-					<Controls>
-						<Backdrop name="$(parent)_Bg" centerColor="FF333333" edgeColor="00000000">
-							<AnchorFill/>
-						</Backdrop>
-					</Controls>
 					<OnInitialized>
 						self:SetText(tostring(0))
 						self:SetMaxInputChars(3)
@@ -60,28 +69,18 @@
 					<Dimensions x="50" y="22" />
 				</Label>
 				
-				<EditBox name="$(parent)Min" inherits="ZO_DefaultEdit" color="FFFFFFFF" font="Constellations_OptionFont" textType="TEXT_TYPE_NUMERIC">
+				<EditBox name="$(parent)Min" inherits="ZO_DefaultEdit Constellations_InputBox" color="FFFFFFFF" font="Constellations_OptionFont" textType="TEXT_TYPE_NUMERIC">
 					<Anchor point="LEFT" relativeTo="$(parent)Value2" relativePoint="RIGHT"  offsetX="30"/>
 					<Dimensions x="32" y="22" />
-					<Controls>
-						<Backdrop name="$(parent)_Bg" centerColor="FF333333" edgeColor="00000000">
-							<AnchorFill/>
-						</Backdrop>
-					</Controls>
 					<OnInitialized>
 						self:SetText(tostring(0))
 						self:SetMaxInputChars(3)
 					</OnInitialized>
 				</EditBox>
 				
-				<EditBox name="$(parent)Max" inherits="ZO_DefaultEdit" color="FFFFFFFF" font="Constellations_OptionFont" textType="TEXT_TYPE_NUMERIC">
+				<EditBox name="$(parent)Max" inherits="ZO_DefaultEdit Constellations_InputBox" color="FFFFFFFF" font="Constellations_OptionFont" textType="TEXT_TYPE_NUMERIC">
 					<Anchor point="LEFT" relativeTo="$(parent)Min" relativePoint="RIGHT"  offsetX="12"/>
 					<Dimensions x="32" y="22" />
-					<Controls>
-						<Backdrop name="$(parent)_Bg" centerColor="FF333333" edgeColor="00000000">
-							<AnchorFill/>
-						</Backdrop>
-					</Controls>
 					<OnInitialized>
 						self:SetText(tostring(100))
 						self:SetMaxInputChars(3)
