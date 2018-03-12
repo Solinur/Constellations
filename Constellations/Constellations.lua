@@ -546,7 +546,7 @@ local function ImportCMXData()
 	
 		fightData, version = CMX.GetAbilityStats()
 		
-		if version < 2
+		if version < 2 then
 		
 			Print("To import data you need to update Combat Metrics!") 
 			return 
