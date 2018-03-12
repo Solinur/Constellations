@@ -36,4 +36,5 @@
 [*]Added some low rank abilities.
 
 0.4.0
-[*]Added Crit Damage Done and Penetration to the values retrieved from Combat Metrics on Import.
+[*]Added crit damage done and penetration to the values retrieved from Combat Metrics on import.
+[*]Added button to reset detailed penetration data which is used after import from Combat Metrics
