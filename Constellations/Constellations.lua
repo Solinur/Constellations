@@ -2,7 +2,7 @@ local em = GetEventManager()
 local _
 local db
 local dx = 1/GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE) --Get UI Scale to draw thin lines correctly
-local pendata
+local pendata = {}
 
 -- Addon Namespace
 Constellations = Constellations or {}
@@ -546,7 +546,7 @@ local function ImportCMXData()
 	
 		fightData, version = CMX.GetAbilityStats()
 		
-		if version < 2 then
+		if version == nil or version < 2 then
 		
 			Print("To import data you need to update Combat Metrics!") 
 			return 
