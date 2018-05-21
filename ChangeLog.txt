@@ -44,3 +44,7 @@
 
 0.4.2 27,948 (24.04.2018) 02:58
 [*]Added ability data for Summerset. This required several hours of tedious work. Luckily @Latin did most of this work for me, for which I'm very grateful. If you are on US maybe consider a little donation. 
+
+0.4.3 32,715 (21.05.2018) 16:13
+[*]API Bump to Summerset (100023)
+[*]Update LAM to r26
