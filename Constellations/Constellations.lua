@@ -1,7 +1,7 @@
 local em = GetEventManager()
 local _
 local db
-local dx = 1/GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE) --Get UI Scale to draw thin lines correctly
+local dx = 1 / GetSetting(SETTING_TYPE_UI, UI_SETTING_CUSTOM_SCALE) --Get UI Scale to draw thin lines correctly
 local pendata = {}
 
 -- Addon Namespace
@@ -13,7 +13,7 @@ CST.debug = true
 
 local function Print(message, ...)
 
-	if CST.debug==false then return end
+	if CST.debug == false then return end
 	df("[%s] %s", CST.name, message:format(...))
 	
 end
@@ -28,9 +28,9 @@ local sliderDefaults = {{CPdefault, 20, spellcrit, 50, CST_DEFAULT_RESIST, weapo
 --local sliderDefaults = {{ratios, 0, 58, 50, 10144, 58, 50, 10144}, {100, 60, 40, 10, 100, 0, 0, 0, 0, 0, 0}, {18200}}
 
 local CategoryStrings = {
-	[1] = "SI_CONSTELLATIONS_INPUT_STATS_LABEL",
-	[2] = "SI_CONSTELLATIONS_INPUT_RATIOS_LABEL",
-	[3] = "SI_CONSTELLATIONS_INPUT_TARGET_LABEL",
+	[1] = "SI_CONSTELLATIONS_INPUT_STATS_LABEL", 
+	[2] = "SI_CONSTELLATIONS_INPUT_RATIOS_LABEL", 
+	[3] = "SI_CONSTELLATIONS_INPUT_TARGET_LABEL", 
 }
 
 local statControl
@@ -58,18 +58,18 @@ function CST.InitializeInputSliders(control, category)
 		
 		if child:GetType() == CT_CONTROL then 
 		
-			local i = child.id
+			local id = child.id
 		
 			local label = child:GetNamedChild("Label")
 			child.label = label
 			
-			local text = GetString(CategoryString, i)
+			local text = GetString(CategoryString, id)
 			local colors = ZO_ColorDef:New(GetString(child.color))
 			
 			label:SetText(text)
 			label:SetColor(colors.r, colors.g, colors.b, colors.a)
 			
-			local tooltipText = GetString(CategoryTTString, i)
+			local tooltipText = GetString(CategoryTTString, id)
 			
 			if tooltipText ~= "" then 
 				label.data = {tooltipText = tooltipText}
@@ -86,7 +86,7 @@ function CST.InitializeInputSliders(control, category)
 				slider:SetValueStep(step)
 			end
 			
-			slider:SetValue(defaults[i])
+			slider:SetValue(defaults[id])
 			
 			local value = child:GetNamedChild("Value")
 			value:SetColor(label:GetColor())		
@@ -186,7 +186,7 @@ end
 function CST.SetBoxValue(self)
 
 	local text = self:GetText()
-	local cleantext = text:sub(string.find(text, "%d+[,%.]?%d*")):gsub(",","%.")	-- make sure number conversion works
+	local cleantext = text:sub(string.find(text, "%d+[,%.]?%d*")):gsub(",", "%.")	-- make sure number conversion works
 
 	local value = tonumber(cleantext)
 	
@@ -224,6 +224,17 @@ function CST.ApplyCurrentStarsButton(control)
 	crossTexture:SetHidden(not CST.ApplyCurrentStars)
 	
 end
+
+-- Stat constants
+
+local STATS_TOTAL_MAGE_CP = 1
+local STATS_DAMAGE_DONE = 2
+local STATS_SPELL_CRIT_CHANCE = 3
+local STATS_SPELL_CRIT_DAMAGE = 4
+local STATS_SPELL_PEN = 5
+local STATS_WEAPON_CRIT_CHANCE = 6
+local STATS_WEAPON_CRIT_DAMAGE = 7
+local STATS_WEAPON_PEN = 8
 
 local function GetCurrentStats()
 
@@ -288,6 +299,22 @@ function CST.Reset(button)
 	wpenvalue:SetColor(colorw.r, colorw.g, colorw.b, colorw.a)
 
 end
+
+-- Ratio constants
+
+local RATIOS_MAGICAL_DAMAGE = 1
+local RATIOS_MAGICAL_DAMAGE_DIRECT = 2
+local RATIOS_MAGICAL_DAMAGE_DOT = 3
+local RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT = 4
+local RATIOS_MAGICAL_DAMAGE_WEAPON_DOT = 11
+local RATIOS_MAGICAL_DAMAGE_CRITABLE = 5
+
+local RATIOS_PHYSICAL_DAMAGE = 6
+local RATIOS_PHYSICAL_DAMAGE_DIRECT = 7
+local RATIOS_PHYSICAL_DAMAGE_DOT = 8
+local RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT = 9
+local RATIOS_PHYSICAL_DAMAGE_WEAPON_DOT = 12
+local RATIOS_PHYSICAL_DAMAGE_CRITABLE = 10
 
 local function GetCurrentRatios()
 
@@ -398,55 +425,67 @@ local STARTYPE_35 = 3
 local STARTYPE_55 = 4
 local STARTYPE_5280 = 5
 
+local ELEMENTAL_EXPERT 		 = 63848
+local SPELL_EROSION          = 61555
+local ELFBORN                = 61680
+local PHYSICAL_WEAPON_EXPERT = 92424
+local MASTER_AT_ARMS         = 92134
+local STAFF_EXPERT           = 60503
+local THAUMATURGE            = 63847
+local PRECISE_STRIKES        = 59105
+local PIERCING               = 61546
+local MIGHTY                 = 63868
+
+
 local CPData = {
-	[63848] = {type = STARTYPE_15, 		attribute=ATTRIBUTE_MAGICKA },	-- Elemental Expert
-	[61555] = {type = STARTYPE_5280, 	attribute=ATTRIBUTE_MAGICKA },	-- Spell Erosion
-	[61680] = {type = STARTYPE_25, 		attribute=ATTRIBUTE_MAGICKA }, 	-- Elfborn
-	[92424] = {type = STARTYPE_35, 		attribute=ATTRIBUTE_STAMINA },	-- Physical Weapon Expert
-	[92134] = {type = STARTYPE_25, 		attribute=ATTRIBUTE_NONE },		-- Master-at-Arms
-	[60503] = {type = STARTYPE_35, 		attribute=ATTRIBUTE_MAGICKA },	-- Staff Expert
-	[63847] = {type = STARTYPE_25, 		attribute=ATTRIBUTE_NONE },		-- Thaumaturge
-	[59105] = {type = STARTYPE_25, 		attribute=ATTRIBUTE_STAMINA }, 	-- Precise Strikes
-	[61546] = {type = STARTYPE_5280, 	attribute=ATTRIBUTE_STAMINA },	-- Piercing
-	[63868] = {type = STARTYPE_15, 		attribute=ATTRIBUTE_STAMINA },	-- Mighty
+	[ELEMENTAL_EXPERT] 			= {type = STARTYPE_15, 		attribute = ATTRIBUTE_MAGICKA },	-- Elemental Expert
+	[SPELL_EROSION] 			= {type = STARTYPE_5280, 	attribute = ATTRIBUTE_MAGICKA },	-- Spell Erosion
+	[ELFBORN] 					= {type = STARTYPE_25, 		attribute = ATTRIBUTE_MAGICKA }, 	-- Elfborn
+	[PHYSICAL_WEAPON_EXPERT] 	= {type = STARTYPE_35, 		attribute = ATTRIBUTE_STAMINA },	-- Physical Weapon Expert
+	[MASTER_AT_ARMS] 			= {type = STARTYPE_25, 		attribute = ATTRIBUTE_NONE },		-- Master-at-Arms
+	[STAFF_EXPERT] 				= {type = STARTYPE_35, 		attribute = ATTRIBUTE_MAGICKA },	-- Staff Expert
+	[THAUMATURGE] 				= {type = STARTYPE_25, 		attribute = ATTRIBUTE_NONE },		-- Thaumaturge
+	[PRECISE_STRIKES] 			= {type = STARTYPE_25, 		attribute = ATTRIBUTE_STAMINA }, 	-- Precise Strikes
+	[PIERCING] 					= {type = STARTYPE_5280, 	attribute = ATTRIBUTE_STAMINA },	-- Piercing
+	[MIGHTY] 					= {type = STARTYPE_15, 		attribute = ATTRIBUTE_STAMINA },	-- Mighty
 }
 
 local JumpPoints = {
-	[STARTYPE_15]	= {0,4,7,11,15,19,23,27,32,37,43,49,64,75,100},
-	[STARTYPE_25]	= {0,3,5,7,9,11,13,15,16,18,20,23,26,28,31,34,37,40,44,48,52,56,66,72,81,100},
-	[STARTYPE_35]	= {0,2,3,5,6,8,9,11,13,14,16,18,19,21,23,25,27,29,31,33,35,37,39,42,44,47,50,53,56,59,63,67,72,77,84,100},
-	--[STARTYPE_55]	= {0,2,3,5,6,8,9,11,13,14,16,18,19,21,23,25,27,29,31,33,35,37,39,42,44,47,50,53,56,59,63,67,72,77,84,100}, not needed for now
+	[STARTYPE_15]	= {0, 4, 7, 11, 15, 19, 23, 27, 32, 37, 43, 49, 64, 75, 100}, 
+	[STARTYPE_25]	= {0, 3, 5, 7, 9, 11, 13, 15, 16, 18, 20, 23, 26, 28, 31, 34, 37, 40, 44, 48, 52, 56, 66, 72, 81, 100}, 
+	[STARTYPE_35]	= {0, 2, 3, 5, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 42, 44, 47, 50, 53, 56, 59, 63, 67, 72, 77, 84, 100}, 
+	--[STARTYPE_55]	= {0, 2, 3, 5, 6, 8, 9, 11, 13, 14, 16, 18, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 42, 44, 47, 50, 53, 56, 59, 63, 67, 72, 77, 84, 100}, not needed for now
 }
 
 local function GetCPValue(abilityId, points, round)
 	
 	local cpType = CPData[abilityId].type
 	local value = 0 
-	points = points/100	
+	points = points / 100	
 	
 	if cpType == STARTYPE_15 then 
 		
-		value = 0.15*points*(2-points)+(points-1)*(points-0.5)*points*2/150
+		value = 0.15 * points * (2 - points) + (points - 1) * (points - 0.5) * points * 2 / 150
 	
 	elseif cpType == STARTYPE_25 then 
 	
-		value = 0.25*points*(2-points)+(points-1)*(points-0.5)*points*2/250
+		value = 0.25 * points * (2 - points) + (points - 1) * (points - 0.5) * points * 2 / 250
 		
 	elseif cpType == STARTYPE_35 then 
 	
-		value = 0.35*points*(2-points)+(points-1)*(points-0.5)*points*2/150
+		value = 0.35 * points * (2 - points) + (points - 1) * (points - 0.5) * points * 2 / 150
 	
 	elseif cpType == STARTYPE_55 then 
 	
-		value = 0.55*points*(2-points)+(points-1)*(points-0.5)*points*2/250
+		value = 0.55 * points * (2 - points) + (points - 1) * (points - 0.5) * points * 2 / 250
 	
 	elseif cpType == STARTYPE_5280 then 
 	
-		value = math.floor(5280*points*(2-points))
+		value = math.floor(5280 * points * (2 - points))
 		round = false
 	end
 	
-	if round == true then value = math.floor(value*100)/100	end
+	if round == true then value = math.floor(value * 100) / 100	end
 	
 	return value
 end
@@ -462,18 +501,18 @@ local function GetDamageFactor(stats, ratios, targetStats, CP, round)
 	end 
 
 	local spellCPMod = ( 
-		(ratios[2]/100 * (1 + cpfactors[63848] + cpfactors[92134] + stats[2]/100)) 							-- Direct Magical Damage (1 + Elemental Expert + Master-at-Arms + Damage Done)
-		+ (ratios[3]/100 * (1 + cpfactors[63848] + cpfactors[63847] + stats[2]/100))						-- DoT Magical Damage (1 + Elemental Expert + Thaumaturge + Damage Done)
-		+ (ratios[4]/100 * (1 + cpfactors[63848] + cpfactors[92134] + cpfactors[60503] + stats[2]/100))		-- Staff Direct Damage (1 + Elemental Expert + Master-at-Arms + Staff Expert + Damage Done)
-		+ (ratios[11]/100 * (1 + cpfactors[63848] + cpfactors[63847] + cpfactors[60503] + stats[2]/100)))	-- Staff DoT Damage (1 + Elemental Expert + Thaumaturge + Staff Expert + Damage Done)
+		(ratios[RATIOS_MAGICAL_DAMAGE_DIRECT] / 100 * (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[MASTER_AT_ARMS] + stats[STATS_DAMAGE_DONE] / 100)) 							-- Direct Magical Damage (1 + Elemental Expert + Master-at-Arms + Damage Done)
+		+ (ratios[RATIOS_MAGICAL_DAMAGE_DOT] / 100 * (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[THAUMATURGE] + stats[STATS_DAMAGE_DONE] / 100))						-- DoT Magical Damage (1 + Elemental Expert + Thaumaturge + Damage Done)
+		+ (ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT] / 100 * (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[MASTER_AT_ARMS] + cpfactors[STAFF_EXPERT] + stats[STATS_DAMAGE_DONE] / 100))		-- Staff Direct Damage (1 + Elemental Expert + Master-at-Arms + Staff Expert + Damage Done)
+		+ (ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT] / 100 * (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[THAUMATURGE] + cpfactors[STAFF_EXPERT] + stats[STATS_DAMAGE_DONE] / 100)))	-- Staff DoT Damage (1 + Elemental Expert + Thaumaturge + Staff Expert + Damage Done)
 		
 	local weaponCPMod = (
-		(ratios[7]/100 * (1 + cpfactors[63868] + cpfactors[92134] + stats[2]/100)) 							-- Direct Physical Damage (1 + Mighty + Master-at-Arms + Damage Done)
-		+ (ratios[8]/100 * (1 + cpfactors[63868] + cpfactors[63847] + stats[2]/100))						-- DoT Magical Damage (1 + Mighty + Thaumaturge + Damage Done)
-		+ (ratios[9]/100 * (1 + cpfactors[63868] + cpfactors[92134] + cpfactors[92424] + stats[2]/100)))	-- Weapon Direct Damage (1 + Mighty + Master-at-Arms + Physical Weapon Expert + Damage Done)
+		(ratios[RATIOS_PHYSICAL_DAMAGE_DIRECT] / 100 * (1 + cpfactors[MIGHTY] + cpfactors[MASTER_AT_ARMS] + stats[STATS_DAMAGE_DONE] / 100)) 							-- Direct Physical Damage (1 + Mighty + Master-at-Arms + Damage Done)
+		+ (ratios[RATIOS_PHYSICAL_DAMAGE_DOT] / 100 * (1 + cpfactors[MIGHTY] + cpfactors[THAUMATURGE] + stats[STATS_DAMAGE_DONE] / 100))						-- DoT Magical Damage (1 + Mighty + Thaumaturge + Damage Done)
+		+ (ratios[RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT] / 100 * (1 + cpfactors[MIGHTY] + cpfactors[MASTER_AT_ARMS] + cpfactors[PHYSICAL_WEAPON_EXPERT] + stats[STATS_DAMAGE_DONE] / 100)))	-- Weapon Direct Damage (1 + Mighty + Master-at-Arms + Physical Weapon Expert + Damage Done)
 
-	local spellCritMod = 1 + ratios[5]/100 * stats[3]/100 * (stats[4]/100 + cpfactors[61680])
-	local weaponCritMod = 1 + ratios[10]/100 * stats[6]/100 * (stats[7]/100 + cpfactors[59105])
+	local spellCritMod = 1 + ratios[RATIOS_MAGICAL_DAMAGE_CRITABLE] / 100 * stats[STATS_SPELL_CRIT_CHANCE] / 100 * (stats[STATS_SPELL_CRIT_DAMAGE] / 100 + cpfactors[ELFBORN])
+	local weaponCritMod = 1 + ratios[RATIOS_PHYSICAL_DAMAGE_CRITABLE] / 100 * stats[STATS_WEAPON_CRIT_CHANCE] / 100 * (stats[STATS_WEAPON_CRIT_DAMAGE] / 100 + cpfactors[PRECISE_STRIKES])
 	
 	local spellPenMod = 0
 	local weaponPenMod = 0
@@ -482,55 +521,53 @@ local function GetDamageFactor(stats, ratios, targetStats, CP, round)
 	
 		spellPenData, weaponPenData, avgPen = unpack(pendata)
 	
-		spellPenAvgDiff = avgPen[1] - (stats[5] + cpfactors[61555])
-		weaponPenAvgDiff = avgPen[2] - (stats[8] + cpfactors[61546])
+		spellPenAvgDiff = avgPen[1] - (stats[STATS_SPELL_PEN] + cpfactors[SPELL_EROSION])
+		weaponPenAvgDiff = avgPen[2] - (stats[STATS_WEAPON_PEN] + cpfactors[PIERCING])
 	
 		for spellPen, damageFrac in pairs(spellPenData) do
 		
-			spellPenMod = spellPenMod + (1 - math.max(targetStats[1] - (spellPen - spellPenAvgDiff),0) / 50000) * damageFrac
+			spellPenMod = spellPenMod + (1 - math.max(targetStats[1] - (spellPen - spellPenAvgDiff), 0) / 50000) * damageFrac
 			
 		end
 	
 		for weaponPen, damageFrac in pairs(weaponPenData) do
 		
-			weaponPenMod = weaponPenMod + (1 - math.max(targetStats[1] - (weaponPen - weaponPenAvgDiff),0) / 50000) * damageFrac
+			weaponPenMod = weaponPenMod + (1 - math.max(targetStats[1] - (weaponPen - weaponPenAvgDiff), 0) / 50000) * damageFrac
 			
 		end
 		
 	else
 	
-		spellPenMod = (1 - math.max(targetStats[1] - stats[5] - cpfactors[61555],0) / 50000)
-		weaponPenMod = (1 - math.max(targetStats[1] - stats[8] - cpfactors[61546],0) / 50000)
+		spellPenMod = (1 - math.max(targetStats[1] - stats[STATS_SPELL_PEN] - cpfactors[SPELL_EROSION], 0) / 50000)
+		weaponPenMod = (1 - math.max(targetStats[1] - stats[STATS_WEAPON_PEN] - cpfactors[PIERCING], 0) / 50000)
 
 	end	
 	
-	local totalspellmod = ratios[1]/100 * spellCPMod * spellCritMod * spellPenMod
-	local totalweaponmod = ratios[6]/100 * weaponCPMod * weaponCritMod * weaponPenMod
+	local totalspellmod = ratios[RATIOS_MAGICAL_DAMAGE] / 100 * spellCPMod * spellCritMod * spellPenMod
+	local totalweaponmod = ratios[RATIOS_PHYSICAL_DAMAGE] / 100 * weaponCPMod * weaponCritMod * weaponPenMod
 
 	local totalmod = totalspellmod + totalweaponmod
 	
-	return totalmod, (ratios[1]/100 * spellCPMod + ratios[6]/100 * weaponCPMod), (ratios[1]/100 * spellCritMod + ratios[6]/100 * weaponCritMod), (ratios[1]/100 * spellPenMod + ratios[6]/100 * weaponPenMod)
+	return totalmod, (ratios[RATIOS_MAGICAL_DAMAGE] / 100 * spellCPMod + ratios[RATIOS_PHYSICAL_DAMAGE] / 100 * weaponCPMod), (ratios[RATIOS_MAGICAL_DAMAGE] / 100 * spellCritMod + ratios[RATIOS_PHYSICAL_DAMAGE] / 100 * weaponCritMod), (ratios[RATIOS_MAGICAL_DAMAGE] / 100 * spellPenMod + ratios[RATIOS_PHYSICAL_DAMAGE] / 100 * weaponPenMod)
 end
 
-
--- Ability Data, sadly hardcoded
-
-local AFFECTED_BY_INCREASEDDAMAGE = 1
+local AFFECTED_BY_EXPERTORMIGHTY = 1
 local AFFECTED_BY_MASTEROFARMS = 2
 local AFFECTED_BY_THAUMATURGE = 3
 local AFFECTED_BY_WEAPONEXPERT = 4
 local AFFECTED_BY_CRITS = 5
+local AFFECTED_BY_PENETRATION = 6
 
-local AbilityData = GetConstellationData()
+local AbilityData = GetConstellationAbilityData() -- see AbilityData.lua
 
 local IsMagickaAbility = {
-	[DAMAGE_TYPE_COLD] = true,
-	[DAMAGE_TYPE_FIRE] = true,
-	[DAMAGE_TYPE_SHOCK] = true,
-	[DAMAGE_TYPE_MAGIC] = true,
-	[DAMAGE_TYPE_PHYSICAL] = false,
-	[DAMAGE_TYPE_POISON] = false,
-	[DAMAGE_TYPE_DISEASE] = false,
+	[DAMAGE_TYPE_COLD] = true, 
+	[DAMAGE_TYPE_FIRE] = true, 
+	[DAMAGE_TYPE_SHOCK] = true, 
+	[DAMAGE_TYPE_MAGIC] = true, 
+	[DAMAGE_TYPE_PHYSICAL] = false, 
+	[DAMAGE_TYPE_POISON] = false, 
+	[DAMAGE_TYPE_DISEASE] = false, 
 }
 
 local function ImportCMXData()
@@ -669,11 +706,11 @@ local function ImportCMXData()
 		
 		if key ~= nil then 
 		
-			ratios[key] = (ratios[key] or 0) + abilityTotal/total*100
+			ratios[key] = (ratios[key] or 0) + abilityTotal / total * 100
 			
 			if abilityCPData ~= nil then
 			
-				if ismagic and abilityCPData[4] then
+				if ismagic and abilityCPData[AFFECTED_BY_CRITS] then
 			
 					spellCrits = spellCrits + ability.hitsOutCritical
 					spellCritDamage = spellCritDamage + ability.damageOutCritical
@@ -681,7 +718,7 @@ local function ImportCMXData()
 					spellHits = spellHits + ability.hitsOutTotal
 					spellDamageTotal = spellDamageTotal + ability.damageOutTotal
 					
-				elseif ismagic == false and abilityCPData[4] then 
+				elseif ismagic == false and abilityCPData[AFFECTED_BY_CRITS] then 
 				
 					weaponCrits = weaponCrits + ability.hitsOutCritical
 					weaponCritDamage = weaponCritDamage + ability.damageOutCritical
@@ -691,27 +728,27 @@ local function ImportCMXData()
 					
 				end
 			
-				if abilityCPData[1] and abilityCPData[3] then 
+				if abilityCPData[AFFECTED_BY_MASTEROFARMS] and abilityCPData[AFFECTED_BY_WEAPONEXPERT] then 
 				
-					ratios[3+key] = ratios[3+key] + abilityTotal/total*100
+					ratios[3 + key] = ratios[3 + key] + abilityTotal / total * 100
 				
-				elseif abilityCPData[1] then 
+				elseif abilityCPData[AFFECTED_BY_MASTEROFARMS] then 
 				
-					ratios[1+key] = ratios[1+key] + abilityTotal/total*100
+					ratios[1 + key] = ratios[1 + key] + abilityTotal / total * 100
 					
-				elseif abilityCPData[2] and abilityCPData[3] and ismagic then 
+				elseif abilityCPData[AFFECTED_BY_THAUMATURGE] and abilityCPData[AFFECTED_BY_WEAPONEXPERT] and ismagic then 
 				
-					ratios[11] = ratios[11] + abilityTotal/total*100
+					ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT] = ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT] + abilityTotal / total * 100
 				
-				elseif abilityCPData[2] then 
+				elseif abilityCPData[AFFECTED_BY_THAUMATURGE] then 
 					
-					ratios[2+key] = ratios[2+key] + abilityTotal/total*100
+					ratios[2 + key] = ratios[2 + key] + abilityTotal / total * 100
 				
 				end
 				
-				if abilityCPData[4] then
+				if abilityCPData[AFFECTED_BY_CRITS] then
 				
-					ratios[4+key] = ratios[4+key] + abilityTotal/total*100
+					ratios[4 + key] = ratios[4 + key] + abilityTotal / total * 100
 				
 				end
 
@@ -726,14 +763,14 @@ local function ImportCMXData()
 	SetRatios(ratios)
 	
 	spellCritRatio = spellCritRatio or (spellCrits / math.max(spellHits, 1))
-	local spellCritDamageRatio = spellCritDamage/math.max(spellDamageTotal, 1)
+	local spellCritDamageRatio = spellCritDamage / math.max(spellDamageTotal, 1)
 	spellCritBonus = spellCritBonus or (spellCritRatio > 0 and spellCritDamageRatio > 0 and 100 * spellCritDamageRatio * (1 - spellCritRatio) / ((1 - spellCritDamageRatio) * spellCritRatio) - 1 or 0) * 100
 	
 	weaponCritRatio = weaponCritRatio or (weaponCrits / math.max(weaponHits, 1))
-	local weaponCritDamageRatio = weaponCritDamage / math.max(weaponDamageTotal,1)
-	weaponCritBonus = weaponCritBonus or (weaponCritRatio > 0 and weaponCritDamageRatio > 0 and 100 * weaponCritDamageRatio * (1 - weaponCritRatio)/((1 - weaponCritDamageRatio) * weaponCritRatio) - 1 or 0) * 100
+	local weaponCritDamageRatio = weaponCritDamage / math.max(weaponDamageTotal, 1)
+	weaponCritBonus = weaponCritBonus or (weaponCritRatio > 0 and weaponCritDamageRatio > 0 and 100 * weaponCritDamageRatio * (1 - weaponCritRatio) / ((1 - weaponCritDamageRatio) * weaponCritRatio) - 1 or 0) * 100
 	
-	local stats = {CPdefault, 20, spellCritRatio*100, spellCritBonus, avgSpellPen, weaponCritRatio*100, weaponCritBonus, avgWeaponPen}
+	local stats = {CPdefault, 20, spellCritRatio * 100, spellCritBonus, avgSpellPen, weaponCritRatio * 100, weaponCritBonus, avgWeaponPen}
 	
 	SetStats(stats)
 	SetPenData(spellPenData, weaponPenData, avgPen)
@@ -782,66 +819,66 @@ local function AccountForPreviousCP(stats, ratios, targetStats, oldCP)
 		
 	end 
 	
-	local oldSpellCritMod = 1 + ratios[5]/100 * stats[3]/100 * (stats[4]/100 + cpfactors[61680])
-	local oldWeaponCritMod = 1 + ratios[10]/100 * stats[6]/100 * (stats[7]/100 + cpfactors[59105])
+	local oldSpellCritMod = 1 + ratios[RATIOS_MAGICAL_DAMAGE_CRITABLE] / 100 * stats[STATS_SPELL_CRIT_CHANCE] / 100 * (stats[STATS_SPELL_CRIT_DAMAGE] / 100 + cpfactors[ELFBORN])
+	local oldWeaponCritMod = 1 + ratios[RATIOS_PHYSICAL_DAMAGE_CRITABLE] / 100 * stats[STATS_WEAPON_CRIT_CHANCE] / 100 * (stats[STATS_WEAPON_CRIT_DAMAGE] / 100 + cpfactors[PRECISE_STRIKES])
 	
-	local oldSpellPenMod = (1 - math.max(targetStats[1] - stats[5] - cpfactors[61555],0) / 50000)
-	local oldWeaponPenMod = (1 - math.max(targetStats[1] - stats[8] - cpfactors[61546],0) / 50000)
+	local oldSpellPenMod = (1 - math.max(targetStats[1] - stats[STATS_SPELL_PEN] - cpfactors[SPELL_EROSION], 0) / 50000)
+	local oldWeaponPenMod = (1 - math.max(targetStats[1] - stats[STATS_WEAPON_PEN] - cpfactors[PIERCING], 0) / 50000)
 	
 	local oldSpellMod = oldSpellCritMod * oldSpellPenMod
 	local oldWeaponMod = oldWeaponCritMod * oldWeaponPenMod
 	
-	stats[4] = stats[4] - cpfactors[61680]*100
-	stats[5] = stats[5] - cpfactors[61555]
-	stats[7] = stats[7] - cpfactors[59105]*100
-	stats[8] = stats[8] - cpfactors[61546]
+	stats[STATS_SPELL_CRIT_DAMAGE] = stats[STATS_SPELL_CRIT_DAMAGE] - cpfactors[ELFBORN] * 100
+	stats[STATS_SPELL_PEN] = stats[STATS_SPELL_PEN] - cpfactors[SPELL_EROSION]
+	stats[STATS_WEAPON_CRIT_DAMAGE] = stats[STATS_WEAPON_CRIT_DAMAGE] - cpfactors[PRECISE_STRIKES] * 100
+	stats[STATS_WEAPON_PEN] = stats[STATS_WEAPON_PEN] - cpfactors[PIERCING]
 	
-	local spellCritMod = 1 + ratios[5]/100 * stats[3]/100 * (stats[4]/100 + cpfactors[61680])
-	local weaponCritMod = 1 + ratios[10]/100 * stats[6]/100 * (stats[7]/100 + cpfactors[59105])
+	local spellCritMod = 1 + ratios[RATIOS_MAGICAL_DAMAGE_CRITABLE] / 100 * stats[STATS_SPELL_CRIT_CHANCE] / 100 * (stats[STATS_SPELL_CRIT_DAMAGE] / 100 + cpfactors[ELFBORN])
+	local weaponCritMod = 1 + ratios[RATIOS_PHYSICAL_DAMAGE_CRITABLE] / 100 * stats[STATS_WEAPON_CRIT_CHANCE] / 100 * (stats[STATS_WEAPON_CRIT_DAMAGE] / 100 + cpfactors[PRECISE_STRIKES])
 	
-	local spellPenMod = (1 - math.max(targetStats[1] - stats[5] - cpfactors[61555],0) / 50000)
-	local weaponPenMod = (1 - math.max(targetStats[1] - stats[8] - cpfactors[61546],0) / 50000)
+	local spellPenMod = (1 - math.max(targetStats[1] - stats[STATS_SPELL_PEN] - cpfactors[SPELL_EROSION], 0) / 50000)
+	local weaponPenMod = (1 - math.max(targetStats[1] - stats[STATS_WEAPON_PEN] - cpfactors[PIERCING], 0) / 50000)
 	
 	local SpellMod = spellCritMod * spellPenMod
 	local WeaponMod = weaponCritMod * weaponPenMod
 
-	local oldMagicRatio = ratios[1]
-	local oldWeaponRatio = ratios[6]
+	local oldMagicRatio = ratios[RATIOS_MAGICAL_DAMAGE]
+	local oldWeaponRatio = ratios[RATIOS_PHYSICAL_DAMAGE]
 	
-	-- ratios[1] is here temporarily used a
+	-- ratios[RATIOS_MAGICAL_DAMAGE] is here temporarily used a
 	
-	ratios[1] = (ratios[1] - ratios[2] - ratios[3] - ratios[4] - ratios[11])/ (1 + cpfactors[63848]) * SpellMod / oldSpellMod 
-	ratios[2] = ratios[2] / (1 + cpfactors[63848] + cpfactors[92134]) * SpellMod / oldSpellMod
-	ratios[3] = ratios[3] / (1 + cpfactors[63848] + cpfactors[63847]) * SpellMod / oldSpellMod
-	ratios[4] = ratios[4] / (1 + cpfactors[63848] + cpfactors[92134] + cpfactors[60503]) * SpellMod / oldSpellMod
-	ratios[11] = ratios[11] / (1 + cpfactors[63848] + cpfactors[63847] + cpfactors[60503]) * SpellMod / oldSpellMod
+	ratios[RATIOS_MAGICAL_DAMAGE] = (ratios[RATIOS_MAGICAL_DAMAGE] - ratios[RATIOS_MAGICAL_DAMAGE_DIRECT] - ratios[RATIOS_MAGICAL_DAMAGE_DOT] - ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT] - ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT])/ (1 + cpfactors[ELEMENTAL_EXPERT]) * SpellMod / oldSpellMod 
+	ratios[RATIOS_MAGICAL_DAMAGE_DIRECT] = ratios[RATIOS_MAGICAL_DAMAGE_DIRECT] / (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[MASTER_AT_ARMS]) * SpellMod / oldSpellMod
+	ratios[RATIOS_MAGICAL_DAMAGE_DOT] = ratios[RATIOS_MAGICAL_DAMAGE_DOT] / (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[THAUMATURGE]) * SpellMod / oldSpellMod
+	ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT] = ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT] / (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[MASTER_AT_ARMS] + cpfactors[STAFF_EXPERT]) * SpellMod / oldSpellMod
+	ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT] = ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT] / (1 + cpfactors[ELEMENTAL_EXPERT] + cpfactors[THAUMATURGE] + cpfactors[STAFF_EXPERT]) * SpellMod / oldSpellMod
 
-	ratios[6] = (ratios[6] - ratios[7] - ratios[8] - ratios[9]) / (1 + cpfactors[63868]) * WeaponMod / oldWeaponMod 
-	ratios[7] = ratios[7] / (1 + cpfactors[63868] + cpfactors[92134]) * WeaponMod / oldWeaponMod
-	ratios[8] = ratios[8] / (1 + cpfactors[63868] + cpfactors[63847]) * WeaponMod / oldWeaponMod
-	ratios[9] = ratios[9] / (1 + cpfactors[63868] + cpfactors[92134] + cpfactors[92424]) * WeaponMod / oldWeaponMod
+	ratios[RATIOS_PHYSICAL_DAMAGE] = (ratios[RATIOS_PHYSICAL_DAMAGE] - ratios[RATIOS_PHYSICAL_DAMAGE_DIRECT] - ratios[RATIOS_PHYSICAL_DAMAGE_DOT] - ratios[RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT]) / (1 + cpfactors[MIGHTY]) * WeaponMod / oldWeaponMod 
+	ratios[RATIOS_PHYSICAL_DAMAGE_DIRECT] = ratios[RATIOS_PHYSICAL_DAMAGE_DIRECT] / (1 + cpfactors[MIGHTY] + cpfactors[MASTER_AT_ARMS]) * WeaponMod / oldWeaponMod
+	ratios[RATIOS_PHYSICAL_DAMAGE_DOT] = ratios[RATIOS_PHYSICAL_DAMAGE_DOT] / (1 + cpfactors[MIGHTY] + cpfactors[THAUMATURGE]) * WeaponMod / oldWeaponMod
+	ratios[RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT] = ratios[RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT] / (1 + cpfactors[MIGHTY] + cpfactors[MASTER_AT_ARMS] + cpfactors[PHYSICAL_WEAPON_EXPERT]) * WeaponMod / oldWeaponMod
 
-	ratios[5] = oldMagicRatio == 0 and 0 or ratios[5] * (ratios[1] + ratios[2] + ratios[3] + ratios[4] + ratios[11]) / oldMagicRatio
-	ratios[10] = oldWeaponRatio == 0 and 0 or ratios[10] * (ratios[6] + ratios[7] + ratios[8] + ratios[9]) / oldWeaponRatio
+	ratios[RATIOS_MAGICAL_DAMAGE_CRITABLE] = oldMagicRatio == 0 and 0 or ratios[RATIOS_MAGICAL_DAMAGE_CRITABLE] * (ratios[RATIOS_MAGICAL_DAMAGE] + ratios[RATIOS_MAGICAL_DAMAGE_DIRECT] + ratios[RATIOS_MAGICAL_DAMAGE_DOT] + ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT] + ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT]) / oldMagicRatio
+	ratios[RATIOS_PHYSICAL_DAMAGE_CRITABLE] = oldWeaponRatio == 0 and 0 or ratios[RATIOS_PHYSICAL_DAMAGE_CRITABLE] * (ratios[RATIOS_PHYSICAL_DAMAGE] + ratios[RATIOS_PHYSICAL_DAMAGE_DIRECT] + ratios[RATIOS_PHYSICAL_DAMAGE_DOT] + ratios[RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT]) / oldWeaponRatio
 	
-	local totalkeys = {1,2,3,4,6,7,8,9,11}
+	local totalkeys = {1, 2, 3, 4, 6, 7, 8, 9, 11}
 	
 	local sumratios = 0
 	
-	for _,i in ipairs(totalkeys) do 
+	for _, i in ipairs(totalkeys) do 
 		
 		sumratios = sumratios + ratios[i]
 	
 	end
 	
-	for i=1,11 do 
+	for i = 1, 11 do 
 		
-		ratios[i] = ratios[i]*100 / sumratios
+		ratios[i] = ratios[i] * 100 / sumratios
 		
 	end
 	
-	ratios[1] = ratios[1] + ratios[2] + ratios[3] + ratios[4] + ratios[11]
-	ratios[6] = ratios[6] + ratios[7] + ratios[8] + ratios[9]
+	ratios[RATIOS_MAGICAL_DAMAGE] = ratios[RATIOS_MAGICAL_DAMAGE] + ratios[RATIOS_MAGICAL_DAMAGE_DIRECT] + ratios[RATIOS_MAGICAL_DAMAGE_DOT] + ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DIRECT] + ratios[RATIOS_MAGICAL_DAMAGE_WEAPON_DOT]
+	ratios[RATIOS_PHYSICAL_DAMAGE] = ratios[RATIOS_PHYSICAL_DAMAGE] + ratios[RATIOS_PHYSICAL_DAMAGE_DIRECT] + ratios[RATIOS_PHYSICAL_DAMAGE_DOT] + ratios[RATIOS_PHYSICAL_DAMAGE_WEAPON_DIRECT]
 	
 end
 
@@ -875,7 +912,7 @@ function CST.Calculate()
 	
 	CST.Before:SetText(string.format("Before: f = %.5f", oldfactors[1]))
 	
-	local totalCP = stats[1]
+	local totalCP = stats[STATS_TOTAL_MAGE_CP]
 	if totalMinCP > totalCP then return end
 	
 	local maxCPValue = math.min(totalMaxCP, totalCP)
@@ -887,7 +924,7 @@ function CST.Calculate()
 	
 	-- Gradient Descent
 	
-	for i=totalMinCP,maxCPValue do
+	for i = totalMinCP, maxCPValue do
 	
 		local oldmaxinc = maxinc
 		local maxKey = 0
@@ -903,7 +940,7 @@ function CST.Calculate()
 			local factors = {GetDamageFactor(stats, ratios, targetStats, cptemp, false)}
 			totalmod = factors[1]
 			
-			if i == maxCP then grad[abilityId] = totalmod-oldmaxinc end
+			if i == maxCP then grad[abilityId] = totalmod - oldmaxinc end
 			
 			if totalmod >= maxinc then
 				maxinc = totalmod
@@ -936,41 +973,41 @@ function CST.Calculate()
 
 		JumpPointTable[id] = JumpPoints[value.type]
 		
-		if value.type == STARTYPE_5280 and ((value.attribute == ATTRIBUTE_MAGICKA and ratios[1]>0) or (value.attribute == ATTRIBUTE_STAMINA and ratios[6]>0) or value.attribute == ATTRIBUTE_NONE) then 
+		if value.type == STARTYPE_5280 and ((value.attribute == ATTRIBUTE_MAGICKA and ratios[RATIOS_MAGICAL_DAMAGE] > 0) or (value.attribute == ATTRIBUTE_STAMINA and ratios[RATIOS_PHYSICAL_DAMAGE] > 0) or value.attribute == ATTRIBUTE_NONE) then 
 		
-			noJPAbilityTable[#noJPAbilityTable+1] = id 
+			noJPAbilityTable[#noJPAbilityTable + 1] = id 
 			
-		elseif (value.attribute == ATTRIBUTE_MAGICKA and ratios[1]>0) or (value.attribute == ATTRIBUTE_STAMINA and ratios[6]>0) or value.attribute == ATTRIBUTE_NONE then
+		elseif (value.attribute == ATTRIBUTE_MAGICKA and ratios[RATIOS_MAGICAL_DAMAGE] > 0) or (value.attribute == ATTRIBUTE_STAMINA and ratios[RATIOS_PHYSICAL_DAMAGE] > 0) or value.attribute == ATTRIBUTE_NONE then
 		
-			JPAbilityTable[#JPAbilityTable+1] = id
+			JPAbilityTable[#JPAbilityTable + 1] = id
 			
 		else
 		
-			IgnoredAbilityTable[#IgnoredAbilityTable+1] = id
+			IgnoredAbilityTable[#IgnoredAbilityTable + 1] = id
 			
 		end
 		
 	end
 	
-	for id,jumpPoints in pairs(JumpPointTable) do
+	for id, jumpPoints in pairs(JumpPointTable) do
 
 		local mindist = 100
 		
-		cpnear[id]={minCP[id], math.floor((minCP[id] + maxCP[id]) / 2), maxCP[id]} -- in case no jumppoint is between min and max
+		cpnear[id] = {minCP[id], math.floor((minCP[id] + maxCP[id]) / 2), maxCP[id]} -- in case no jumppoint is between min and max
 		
-		for i,jp in ipairs(jumpPoints) do
+		for i, jp in ipairs(jumpPoints) do
 
 			if math.abs(jp - calcCP[id]) < mindist and jp <= maxCP[id] and jp >= minCP[id] then
 				mindist = math.abs(jp - calcCP[id])
 				
-				local cpminus = jumpPoints[i-1] or 0
+				local cpminus = jumpPoints[i - 1] or 0
 				local cpnearest = jp
-				local cpplus = jumpPoints[i+1] or 100
+				local cpplus = jumpPoints[i + 1] or 100
 				
 				local low = cpminus >= minCP[id] and cpminus or cpnearest
 				local high = cpplus <= maxCP[id] and cpplus or cpnearest
 				
-				cpnear[id]={low, cpnearest, high}
+				cpnear[id] = {low, cpnearest, high}
 			end			
 		end
 		
@@ -981,19 +1018,19 @@ function CST.Calculate()
 	
 	Print("Descent lowered factor: %.6f (CP: %.6f, Crit: %.6f, Pen: %.6f)", unpack(descfactors))
 	
-	local iterations = math.pow(3,#JPAbilityTable) - 1
+	local iterations = math.pow(3, #JPAbilityTable) - 1
 	
 	local div = {}
 	
-	for i=1,#JPAbilityTable do 
+	for i = 1, #JPAbilityTable do 
 	
-		div[i] = math.pow(3,i-1)
+		div[i] = math.pow(3, i - 1)
 
 	end
 	
 	-- Check all nearby JumpPoints
 	
-	for i = 0,iterations do
+	for i = 0, iterations do
 
 		local cptemp = {}
 		
@@ -1001,7 +1038,7 @@ function CST.Calculate()
 		
 		for k, id in ipairs(JPAbilityTable) do
 			
-			local value = cpnear[id][math.floor(i/div[k])%3+1]
+			local value = cpnear[id][math.floor(i / div[k])%3 + 1]
 			cptemp[id] = value
 			totalCP = totalCP + value
 			
@@ -1025,7 +1062,7 @@ function CST.Calculate()
 			
 			local CPremain = maxCPValue - totalCP
 			
-			for i=totalCP,maxCPValue-1 do
+			for i = totalCP, maxCPValue - 1 do
 
 				local maxKey = noJPAbilityTable[1]
 				
@@ -1064,15 +1101,15 @@ function CST.Calculate()
 	
 	CST.After:SetText(string.format("New: f = %.5f", newfactors[1]))
 	
-	local resultcolor = { 1,.5,.5,1}
+	local resultcolor = { 1, .5, .5, 1}
 	
-	if newfactors[1]>oldfactors[1] then resultcolor = { .5,1,.5,1} end
+	if newfactors[1] > oldfactors[1] then resultcolor = { .5, 1, .5, 1} end
 	
 	CST.After:SetColor(unpack(resultcolor))
 end
 
 local svdefaults = {
-	["window"]={x=150*dx,y=150*dx,height=zo_round(25/dx)*dx,width=zo_round(300/dx)*dx},
+	["window"] = {x = 150 * dx, y = 150 * dx, height = zo_round(25 / dx) * dx, width = zo_round(300 / dx) * dx}, 
 }
 
 function CST:Initialize(event, addon)
@@ -1081,7 +1118,7 @@ function CST:Initialize(event, addon)
  
 	-- load saved variables
  
-	db = ZO_SavedVars:NewAccountWide(self.name.."_Save", 7, nil, svdefaults) -- taken from Aynatirs guide at http://www.esoui.com/forums/showthread.php?t=6442
+	db = ZO_SavedVars:NewAccountWide(self.name.."_Save", 7, nil, svdefaults) -- taken from Aynatirs guide at http://www.esoui.com123456789forums123456789showthread.php?t=6442
 	
 	if db.accountwide == false then
 		db = ZO_SavedVars:NewCharacterIdSettings(self.name.."_Save", 7, nil, svdefaults)
@@ -1101,10 +1138,10 @@ function CST:Initialize(event, addon)
 	
 	window:SetHandler("OnMoveStop", function(control)
 		local x, y = control:GetScreenRect()
-		x = zo_round(x/dx)*dx
-		y = zo_round(y/dx)*dx
-		db.window.x=x
-		db.window.y=y
+		x = zo_round(x / dx) * dx
+		y = zo_round(y / dx) * dx
+		db.window.x = x
+		db.window.y = y
 		window:ClearAnchors()
 		window:SetAnchor(TOPLEFT, GuiRoot, TOPLEFT, db.window.x, db.window.y)
 	end)
