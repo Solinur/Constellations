@@ -8,7 +8,7 @@ local pendata = {}
 Constellations = Constellations or {}
 local CST = Constellations
 CST.name 		= "Constellations"
-CST.version 	= "0.4.3"
+CST.version 	= "0.4.4"
 CST.debug = true
 
 local function Print(message, ...)
