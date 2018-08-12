@@ -48,3 +48,7 @@
 0.4.3 32,715 (21.05.2018) 16:13
 [*]API Bump to Summerset (100023)
 [*]Update LAM to r26
+
+0.4.4 (12.08.2018) 16:13
+[*]API Bump to Wolfhunter (100024)
+[*]Added Several missing Skills (One Hand and Shield, Werewolf, Psijic Guild, Light and Heavy Attacks). Thanks to gvarnadoe and BjørnTheBurr for reporting some of them.
