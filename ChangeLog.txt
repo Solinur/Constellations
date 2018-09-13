@@ -52,3 +52,9 @@
 0.4.4 (12.08.2018) 16:13
 [*]API Bump to Wolfhunter (100024)
 [*]Added Several missing Skills (One Hand and Shield, Werewolf, Psijic Guild, Light and Heavy Attacks). Thanks to gvarnadoe and BjørnTheBurr for reporting some of them.
+
+0.4.5 (13.08.2018) 13:17
+[*]Fixed critical error in Ability Data
+
+0.4.6 50,652 (14.09.2018) 00:05
+[*]Added a few missing skills and item procs. Thanks to Jonno for reporting them.
