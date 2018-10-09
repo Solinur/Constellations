@@ -336,6 +336,7 @@ local AbilityData = {
 	[62606] = {true, false, true, false, true, true}, --Radial Sweep (dot)
 	[62598] = {true, false, true, false, true, true}, --Radial Sweep (dot)
 	[63961] = {true, false, true, false, true, true}, --Radiant Oppression
+	[63956] = {true, false, true, false, true, true}, --Radiant Glory
 	[22182] = {true, true, false, false, true, true}, --Radiant Ward
 	[21732] = {true, true, false, false, true, true}, --Reflective Light
 	[21734] = {true, false, true, false, true, true}, --Reflective Light (dot)

@@ -186,12 +186,21 @@ end
 function CST.SetBoxValue(self)
 
 	local text = self:GetText()
-	local cleantext = text:sub(string.find(text, "%d+[,%.]?%d*")):gsub(",", "%.")	-- make sure number conversion works
-
-	local value = tonumber(cleantext)
+	
+	local i, j = text:find("%d+[,%.]?%d*")
 	
 	local slider = self:GetParent():GetNamedChild("Slider")
 	
+	local cleantext = slider:GetValue()
+	
+	if i and j then 
+	
+		cleantext = text:sub(i, j):gsub(",", "%.")	-- make sure number conversion works
+
+	end
+	
+	local value = tonumber(cleantext)
+		
 	local min, max = slider:GetMinMax()
 	local form = max > 150 and "%.0f" or "%.1f%%"
 	
