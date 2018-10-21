@@ -58,3 +58,6 @@
 
 0.4.6 50,652 (14.09.2018) 00:05
 [*]Added a few missing skills and item procs. Thanks to Jonno for reporting them.
+
+0.4.7 56,780 (21.10.2018) 19:51
+[*]API Bump to Murkmire (100025)
