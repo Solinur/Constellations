@@ -1,7 +1,11 @@
--- isAffectedby = {Master-at-Arms, Thaumaturge, Staff/Weapon Expert, Elfborn/Precise Strikes}  (only pet skills or skills that can't crit are not affected by elfborn)
--- list is at https://docs.google.com/spreadsheets/d/1AMVpTmhUMBz-7gPOwKNSBA2VnX-Wjju8xIpPk0wk1Io
+--[[ 
 
--- Data Format: T/F if affected by {EXPERTORMIGHTY, MASTEROFARMS, THAUMATURGE, WEAPONEXPERT, CRITS, PENETRATION}
+isAffectedby = {Master-at-Arms, Thaumaturge, Staff/Weapon Expert, Elfborn/Precise Strikes}  (only pet skills or skills that can't crit are not affected by elfborn)
+list is at https://docs.google.com/spreadsheets/d/1AMVpTmhUMBz-7gPOwKNSBA2VnX-Wjju8xIpPk0wk1Io
+
+Data Format: T/F if affected by {EXPERTORMIGHTY, MASTEROFARMS, THAUMATURGE, WEAPONEXPERT, CRITS, PENETRATION}
+
+--]]
 
 local AbilityData = {
 	[40267] = {true, false, true, false, true, true}, --Anti-Calvary Caltrops
@@ -414,6 +418,7 @@ local AbilityData = {
 	[39109] = {true, true, false, false, true, true}, --Brutal Pounce
 	[58864] = {true, true, false, false, true, true}, --Claws of Anguish
 	[58879] = {true, true, false, false, true, true}, --Claws of Life
+	[58880] = {true, false, true, false, true, true}, --Claws of Life (dot)
 	[39107] = {true, true, false, false, true, true}, --Feral Pounce
 	[80189] = {true, true, false, false, true, true}, --Gnash (Pact Leader)
 	[80190] = {true, true, false, false, true, true}, --Gnash (Pact Leader)
