@@ -61,3 +61,6 @@
 
 0.4.7 56,780 (21.10.2018) 19:51
 [*]API Bump to Murkmire (100025)
+
+0.4.8  (10.01.2019) 19:51
+[*]Added a few missing abilities. Thanks to Tonyleila, dhomhnuill and Deloth_Vyrr for the reports.
