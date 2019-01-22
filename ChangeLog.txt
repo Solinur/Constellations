@@ -59,8 +59,12 @@
 0.4.6 50,652 (14.09.2018) 00:05
 [*]Added a few missing skills and item procs. Thanks to Jonno for reporting them.
 
-0.4.7 56,780 (21.10.2018) 19:51
+0.4.7 DL: 56,780 (21.10.2018) 19:51
 [*]API Bump to Murkmire (100025)
 
-0.4.8  (10.01.2019) 19:51
+0.4.8 ?? (10.01.2019) 19:51
 [*]Added a few missing abilities. Thanks to Tonyleila, dhomhnuill and Deloth_Vyrr for the reports.
+
+0.4.9 DL: 69,152 (22.01.2019) 00:51
+[*]API Bump to Wrathstone (100026)
+[*]Reorganized bundled libraries (Make sure to activate them in the Addon Panel). This should fix a lua error some received.
