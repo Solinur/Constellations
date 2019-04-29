@@ -1,4 +1,4 @@
-0.3.2 139 (21.06.2017, 23:48)
+﻿0.3.2 139 (21.06.2017, 23:48)
 [*]Fixed an error that happened when one type of damage was 0
 
 0.3.3 561 (27.06.2017, 21:11)
@@ -68,3 +68,7 @@
 0.4.9 DL: 69,152 (22.01.2019) 00:51
 [*]API Bump to Wrathstone (100026)
 [*]Reorganized bundled libraries (Make sure to activate them in the Addon Panel). This should fix a lua error some received.
+
+0.4.10 DL: 83,901 (27.04.2019) 23:57
+[*]Updated Libs & Api Bump.
+[*]Updated Sorcerer pet ability data. Thanks to @Tony1697 for pointing this out and providing some of the data.
