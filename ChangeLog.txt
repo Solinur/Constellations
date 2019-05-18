@@ -72,3 +72,8 @@
 0.4.10 DL: 83,901 (27.04.2019) 23:57
 [*]Updated Libs & Api Bump.
 [*]Updated Sorcerer pet ability data. Thanks to @Tony1697 for pointing this out and providing some of the data.
+
+0.4.11 DL: 90,260 (19.05.2019) 01:33
+[*]Updated Libs.
+[*]Checked and if necessary updated almost all abilities.
+[*]Added Necromance abilities.

@@ -8,8 +8,8 @@ local pendata = {}
 Constellations = Constellations or {}
 local CST = Constellations
 CST.name 		= "Constellations"
-CST.version 	= "0.4.10"
-CST.debug = true
+CST.version 	= "0.4.11"
+CST.debug = false or GetDisplayName() == "@Solinur"
 
 local function Print(message, ...)
 
@@ -585,7 +585,7 @@ local function ImportCMXData()
 
 	if CMX == nil or CMX.GetAbilityStats == nil then 
 	
-		Print("To import data you need to install/update Combat Metrics!") 
+		df("To import data you need to install/update Combat Metrics!") 
 		return 
 		
 	else
@@ -594,7 +594,7 @@ local function ImportCMXData()
 		
 		if version == nil or version < 2 then
 		
-			Print("To import data you need to update Combat Metrics!") 
+			df("To import data you need to update Combat Metrics!") 
 			return 
 		
 		elseif fightData == nil then 
@@ -764,7 +764,7 @@ local function ImportCMXData()
 			else
 		
 				local name = GetAbilityName(id)
-				Print("(%d) %s - No Data for this Ability!", id, name)
+				df("(%d) %s - No Data for this Ability!", id, name)
 			end
 		end
 	end
