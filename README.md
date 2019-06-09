@@ -37,7 +37,7 @@ It then attempts to calculate a better CP distribution and shows your original a
 
 * The addon can not automatically detect your Damage Done values. You need to set it yourself.
 * The addon can not set any CP's, you only get shown what would be optimal.
-* Some abilities [COLOR="Yellow"][B]including most abilities which are not rank 4[/B][/COLOR] are still missing from the database, which means they won't be automatically imported. A debug message will hint at these abilities. Please report them here, so I can implement them in the future. If you have some experience in theory crafting you can also comment on this [URL="https://docs.google.com/spreadsheets/d/1AMVpTmhUMBz-7gPOwKNSBA2VnX-Wjju8xIpPk0wk1Io/edit?usp=sharing"]spreadsheet[/URL] which I (and hopefully others) will update.
+* Some abilities **including most abilities which are not rank 4** are still missing from the database, which means they won't be automatically imported. A debug message will hint at these abilities. Please report them here, so I can implement them in the future. If you have some experience in theory crafting you can also comment on this [spreadsheet](https://docs.google.com/spreadsheets/d/1AMVpTmhUMBz-7gPOwKNSBA2VnX-Wjju8xIpPk0wk1Io/edit?usp=sharing") which I (and hopefully others) will update.
 
 Big thanks to Latin for doing most of the work to collect data for all those abilities. Addtional thanks to Asayre for his theory crafting work on all the ingame mechanics.
 
