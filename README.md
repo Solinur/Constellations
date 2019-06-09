@@ -15,7 +15,7 @@ They are included in the release and have to be enabled in the Addon panel ingam
 
 **Please note that the addon is still in beta so don't expect everything to be perfect.**
 
-After all that recent changes to the Champion Point System, distributing your CP to optimize your DPS has become a rather complicated affair. Theory Crafters like [URL="http://solinur.de/AsayreCP/CPOptimisation.html"]Asayre[/URL] and [URL="https://woeler.eu/cp/"]Br1ckst0n/Woeler[/URL] have worked to make CP calculators available, but this still requires you to get a parse, analyse it and enter the data manually.
+After all that recent changes to the Champion Point System, distributing your CP to optimize your DPS has become a rather complicated affair. Theory Crafters like [Asayre](http://solinur.de/AsayreCP/CPOptimisation.html) and [Br1ckst0n/Woeler](https://woeler.eu/cp/) have worked to make CP calculators available, but this still requires you to get a parse, analyse it and enter the data manually.
 
 This addon aims to simplify this process by automatically reading a Combat Metrics parse and enter all data automatically. 
 
