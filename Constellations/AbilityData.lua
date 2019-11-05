@@ -1,8 +1,10 @@
---[[ 
+--[[
 
 Data Format: T/F if affected by {EXPERTORMIGHTY, MASTEROFARMS, THAUMATURGE, WEAPONEXPERT, CRITS, PENETRATION}
 
 --]]
+
+local double = "double"
 
 local AbilityData = {
 
@@ -117,7 +119,7 @@ local AbilityData = {
 	[85156] = {true, false, true, false, true, true}, --Lacerate
 	[16499] = {true, true, false, true, true, true}, --Light Attack
 	[62529] = {true, false, true, false, true, true}, --Quick Cloak
-	[38857] = {true, false, true, false, true, true}, --Rapid Strikes
+	[38857] = {true, true, false, false, true, true}, --Rapid Strikes
 	[85192] = {true, false, true, false, true, true}, --Rend
 	[38839] = {true, true, false, false, true, true}, --Rending Slashes
 	[38840] = {true, true, false, false, true, true}, --Rending Slashes
@@ -190,7 +192,7 @@ local AbilityData = {
 	[39056] = {true, true, false, false, true, true}, --Unstable Wall of Fire
 	[62896] = {true, false, true, false, true, true}, --Wall of Fire
 	[46746] = {true, true, false, false, true, true}, --Absorb Stamina
-	[107203] = {true, true, true, false, true, true}, --Arms of Relequen
+	[107203] = {true, false, true, false, false, true}, --Arms of Relequen
 	[17904] = {true, true, false, false, true, true}, --Befouled Weapon
 	[17899] = {true, true, false, false, true, true}, --Charged Weapon
 	[46749] = {true, true, false, false, true, true}, --Damage Health
@@ -211,6 +213,7 @@ local AbilityData = {
 	[28919] = {true, true, false, false, true, true}, --Life Drain
 	[107094] = {true, false, true, false, false, true}, --Mantle of Siroria
 	[59498] = {true, false, true, false, false, true}, --Mephala's Web
+	[99789] = {true, false, true, false, true, true}, --Merciless Charge
 	[59593] = {true, true, false, false, false, true}, --Nerien'eth
 	[17902] = {true, true, false, false, true, true}, --Poisoned Weapon
 	[40337] = {true, true, false, false, true, true}, --Prismatic Weapon
@@ -363,6 +366,7 @@ local AbilityData = {
 	[16212] = {true, false, true, true, true, true}, --Heavy Attack
 	[16145] = {true, true, false, true, true, true}, --Light Attack
 	[23428] = {true, false, true, false, true, true}, --Atronach Zap
+	[130318] = {true, true, false, false, true, true}, --Bound Armaments
 	[23214] = {true, false, true, false, true, true}, --Boundless Storm
 	[23667] = {true, true, false, false, true, true}, --Charged Atronach Impact
 	[46331] = {true, true, false, false, true, true}, --Crystal Blast
@@ -428,11 +432,11 @@ local AbilityData = {
 	[21487] = {true, false, true, false, true, true}, --Concussion
 	[21929] = {true, false, true, false, true, true}, --Poisoned
 	[26800] = {true, true, false, false, true, true}, --Aurora Javelin
-	[26411] = {false, false, false, false, false, false}, --Backlash
+	[26411] = {false, false, false, false, true, false}, --Backlash
 	[89821] = {true, true, false, false, true, true}, --Backlash
 	[26804] = {true, true, false, false, true, true}, --Binding Javelin
-	[26794] = {true, false, true, false, true, true}, --Biting Jabs
-	[44432] = {true, false, true, false, true, true}, --Biting Jabs
+	[26794] = {true, true, false, false, true, true}, --Biting Jabs
+	[44432] = {true, true, false, false, true, true}, --Biting Jabs
 	[26871] = {true, false, true, false, true, true}, --Blazing Spear
 	[26879] = {true, false, true, false, true, true}, --Blazing Spear
 	[44731] = {true, true, false, false, true, true}, --Burning Light
@@ -449,13 +453,13 @@ local AbilityData = {
 	[95955] = {true, false, true, false, true, true}, --Luminous Shards
 	[21753] = {true, false, true, false, true, true}, --Nova
 	[26158] = {true, true, false, false, true, true}, --Piercing Javelin
-	[27567] = {false, false, false, false, false, false}, --Power of the Light
+	[27567] = {false, false, false, false, true, false}, --Power of the Light
 	[89828] = {true, true, false, false, true, true}, --Power of the Light
-	[26116] = {true, false, true, false, true, true}, --Puncturing Strikes
-	[44426] = {true, false, true, false, true, true}, --Puncturing Strikes
-	[26799] = {true, false, true, false, true, true}, --Puncturing Sweep
-	[44436] = {true, false, true, false, true, true}, --Puncturing Sweep
-	[27544] = {false, false, false, false, false, false}, --Purifying Light
+	[26116] = {true, true, false, false, true, true}, --Puncturing Strikes
+	[44426] = {true, true, false, false, true, true}, --Puncturing Strikes
+	[26799] = {true, true, false, false, true, true}, --Puncturing Sweep
+	[44436] = {true, true, false, false, true, true}, --Puncturing Sweep
+	[27544] = {false, false, false, false, true, false}, --Purifying Light
 	[89825] = {true, true, false, false, true, true}, --Purifying Light
 	[63952] = {true, false, true, false, true, true}, --Radiant Destruction
 	[63956] = {true, false, true, false, true, true}, --Radiant Glory
@@ -495,9 +499,10 @@ local AbilityData = {
 	[16037] = {true, true, false, true, true, true}, --Light Attack
 	[83229] = {true, true, false, false, true, false}, --Onslaught
 	[28302] = {true, true, false, false, true, true}, --Reverse Slash
-	[38823] = {true, true, false, false, true, true}, --Reverse Slice
 	[38827] = {true, true, false, false, true, double}, --Reverse Slice
+	[38823] = {true, true, false, false, true, true}, --Reverse Slice
 	[38792] = {true, true, false, false, true, true}, --Stampede
+	[126474] = {true, false, true, false, true, true}, --Stampede
 	[28279] = {true, true, false, false, true, true}, --Uppercut
 	[38807] = {true, true, false, false, true, true}, --Wrecking Blow
 	[42060] = {true, true, false, false, true, true}, --Inner Beast
@@ -572,19 +577,8 @@ local AbilityData = {
 
 }
 
-function GetConstellationAbilityData() 
+function GetConstellationAbilityData()
 
 	return AbilityData
-	
-	--[[
-	if GetAPIVersion() < 100027 then 
-	
-		return AbilityData
-		
-	else 
-	
-		return AbilityData27 or AbilityData
-		
-	end
-	--]]
+
 end
