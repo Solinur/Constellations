@@ -94,6 +94,6 @@
 0.4.14 DL: 129,467 (06.11.2019) 00:07
 [*] Added a few Updates to Abilities recently introduced or changed. Thanks to LiquidPony and iiJonno for reporting them.
 [*] Removed bundle Libraries. You will need to install [URL="https://www.esoui.com/downloads/info7-LibAddonMenu.html"]LibAddonMenu[/URL] separately, if you haven't done so already.
-[*] Removed unecessary white spaces.
-[*] Fixed variables that were nuintentionally global
+[*] Removed unnecessary white spaces.
+[*] Fixed variables that were unintentionally global
 [*] Some minor fixes in XML code

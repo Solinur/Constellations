@@ -797,7 +797,7 @@ local function ImportCMXData()
 	local wpenvalue = CST.WPenBox:GetNamedChild("Value")
 
 	spenvalue.data = {tooltipText = GetString(SI_CONSTELLATIONS_INPUT_LABEL_SPELLPEN_TOOLTIP)}
-	wpenvalue.data = {tooltipText = GetString(SI_CONSTELLATIONS_INPUT_LABEL_SPELLPEN_TOOLTIP)}
+	wpenvalue.data = {tooltipText = GetString(SI_CONSTELLATIONS_INPUT_LABEL_WEAPONPEN_TOOLTIP)}
 
 	if spenvalue:GetHandler("OnMouseEnter") == nil then
 
