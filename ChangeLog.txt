@@ -91,9 +91,15 @@
 [*] API Bump to Dragonhold (100029)
 [*] Info: The next update will remove bundled libraries.
 
-0.4.14 DL: 129,467 (06.11.2019) 00:07
+0.4.15 DL: 129,467 (06.11.2019) 00:07
 [*] Added a few Updates to Abilities recently introduced or changed. Thanks to LiquidPony and iiJonno for reporting them.
 [*] Removed bundle Libraries. You will need to install [URL="https://www.esoui.com/downloads/info7-LibAddonMenu.html"]LibAddonMenu[/URL] separately, if you haven't done so already.
 [*] Removed unnecessary white spaces.
 [*] Fixed variables that were unintentionally global
 [*] Some minor fixes in XML code
+
+0.4.16 DL: 141,834 (22.02.2020) 23:11
+[*] API Bump to Dragonhold (100023)
+[*] Didn't get around to check if any CP relevant changes were done to abilities. I'll have a look trough the patch notes next week, but feel free to notify me of changes.
+[*] Removed LibAddonMenu dependency since it is not actually used.
+[*] Code cleanup and small fixes
