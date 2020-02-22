@@ -99,7 +99,7 @@
 [*] Some minor fixes in XML code
 
 0.4.16 DL: 141,834 (22.02.2020) 23:11
-[*] API Bump to Dragonhold (100023)
+[*] API Bump to Harrowstorm (100030)
 [*] Didn't get around to check if any CP relevant changes were done to abilities. I'll have a look trough the patch notes next week, but feel free to notify me of changes.
 [*] Removed LibAddonMenu dependency since it is not actually used.
 [*] Code cleanup and small fixes
