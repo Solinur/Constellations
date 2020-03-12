@@ -103,3 +103,7 @@
 [*] Didn't get around to check if any CP relevant changes were done to abilities. I'll have a look trough the patch notes next week, but feel free to notify me of changes.
 [*] Removed LibAddonMenu dependency since it is not actually used.
 [*] Code cleanup and small fixes
+
+0.4.17 DL: 149,067 (12.03.2020) 23:09
+[*] Checked and where necessary updated Templar abilities.
+[*] Updated Necrotic & Mystic Orb abilities (Thx to Parth for reporting this). 
