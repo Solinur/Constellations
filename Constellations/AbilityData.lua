@@ -192,6 +192,7 @@ local AbilityData = {
 	[39056] = {true, true, false, false, true, true}, --Unstable Wall of Fire
 	[62896] = {true, false, true, false, true, true}, --Wall of Fire
 	[46746] = {true, true, false, false, true, true}, --Absorb Stamina
+	[133494] = {true, false, true, false, false, true}, --Aegis Caller
 	[107203] = {true, false, true, false, false, true}, --Arms of Relequen
 	[17904] = {true, true, false, false, true, true}, --Befouled Weapon
 	[17899] = {true, true, false, false, true, true}, --Charged Weapon

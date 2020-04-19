@@ -107,3 +107,6 @@
 0.4.17 DL: 149,067 (12.03.2020) 23:09
 [*] Checked and where necessary updated Templar abilities.
 [*] Updated Necrotic & Mystic Orb abilities (Thx to Parth for reporting this). 
+
+0.4.18 DL: 157,983 (19.04.2020) 12:27
+[*] Added Aegis Caller
