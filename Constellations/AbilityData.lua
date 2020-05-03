@@ -268,6 +268,7 @@ local AbilityData = {
 	[115608] = {true, true, false, false, true, true}, --Blastbones
 	[117715] = {true, true, false, false, true, true}, --Blighted Blastbones
 	[115254] = {true, false, true, false, true, true}, --Boneyard
+	[115572] = {true, true, false, false, true, true}, --Grave Robber (Synergy)
 	[115115] = {true, true, false, false, true, true}, --Death Scythe
 	[114461] = {true, true, false, false, true, true}, --Deathbolt
 	[118746] = {true, true, false, false, true, true}, --Deathbolt

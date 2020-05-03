@@ -11,10 +11,13 @@ local strings = {
 
     SI_CONSTELLATIONS_BUTTON_IMPORT_TEXT = "Combat Metrics Import",
     SI_CONSTELLATIONS_BUTTON_RESET_TEXT = "Reset Penetration",
-    SI_CONSTELLATIONS_BUTTON_CALCULATE_TEXT = "Calculate",
 
     SI_CONSTELLATIONS_RATIOBUTTON_TT = "Damage Stats and Ratios",
     SI_CONSTELLATIONS_CPBUTTON_TT = "Champion Points",
+
+    SI_CONSTELLATIONS_INPUT_STATS = "Stats",
+    SI_CONSTELLATIONS_INPUT_RATIOS = "Damage Ratios",
+    SI_CONSTELLATIONS_INPUT_OTHER = "Other",
 
     SI_CONSTELLATIONS_INPUT_STATS_LABEL1 = "Mage CP",
     SI_CONSTELLATIONS_INPUT_STATS_LABEL_TOOLTIP1 = "Total number of available CP in the Mage Constellations",
@@ -57,7 +60,30 @@ local strings = {
     SI_CONSTELLATIONS_INPUT_LABEL_SPELLPEN_TOOLTIP = "Penetration distribution from Combat Metrics Import is active. Changing this value will only offset the distribution. To reset use the \"Reset Penetration\" button below",
     SI_CONSTELLATIONS_INPUT_LABEL_WEAPONPEN_TOOLTIP = "Penetration distribution from Combat Metrics Import is active. Changing this value will only offset the distribution. To reset use the \"Reset Penetration\" button below",
 
-    SI_CONSTELLATIONS_INPUT_TARGET_LABEL1 = "Spell/Weapon Resistance",
+    SI_CONSTELLATIONS_INPUT_OTHER_LABEL1 = "Target Resistance",
+    SI_CONSTELLATIONS_INPUT_OTHER_LABEL_TOOLTIP1 = "Targets Weapon and Spell Resistance",
+    SI_CONSTELLATIONS_INPUT_OTHER_LABEL2 = "DPS",
+    SI_CONSTELLATIONS_INPUT_OTHER_LABEL3 = "Off Balance Uptime",
+
+    SI_CONSTELLATIONS_RESULT_CP = "Champion Points",
+    SI_CONSTELLATIONS_RESULT_OLD = "Old",
+    SI_CONSTELLATIONS_RESULT_NEW = "New",
+    SI_CONSTELLATIONS_RESULT_MIN = "Min",
+    SI_CONSTELLATIONS_RESULT_MAX = "Max",
+    SI_CONSTELLATIONS_RESULT_LAXOUT = "%+d DPS (%+.2f%%)",
+    SI_CONSTELLATIONS_RESULT_LAXOUT_NEUTRAL = "---",
+
+    SI_CONSTELLATIONS_RESULT_RESETCP = "Reset old CP",
+    SI_CONSTELLATIONS_BUTTON_CALCULATE = "Calculate",
+    SI_CONSTELLATIONS_RESULT_ACCOUNTOLDCP = "Account for old Champion Points",
+
+    SI_CONSTELLATIONS_RESULT_OLD_DPS = "Old DPS: ",
+    SI_CONSTELLATIONS_RESULT_NEW_DPS = "New DPS: ",
+    SI_CONSTELLATIONS_RESULT_LAYOUT_DPS = "%s%d",
+    
+    SI_CONSTELLATIONS_RESULT_OLD_FACTOR = "Old factor: ",
+    SI_CONSTELLATIONS_RESULT_NEW_FACTOR = "New factor: ",
+    SI_CONSTELLATIONS_RESULT_LAYOUT_FACTOR = "%s%.5f",
 }
 
 for stringId, stringValue in pairs(strings) do
