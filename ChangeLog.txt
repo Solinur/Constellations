@@ -110,3 +110,11 @@
 
 0.4.18 DL: 157,983 (19.04.2020) 12:27
 [*] Added Aegis Caller
+
+1.0.0 DL: 166,940 (21.05.2020) 18:39
+[*] Added better display of results including percentage increase, DPS increase. In case you don't want to import a fight, the base DPS can be set on first page.
+[*] Added some limited support for Exploiter passive. 
+[*] A few Notes on that:
+[*] When one of the investigated CP combinations fulfills requirements for the exploiter passive, it will now be attributed with the appropriate result that includes the (averaged) damage bonus. 
+[*] The uptime of the required Off-Balance buff will be read from the imported data but can also be set on the first page. Default is the current maximum uptime. Keep in mind  that in order to precisely attribute the effect, a reasonable estimation of "Damage Bonus %" on the first page is required. 
+[*] In order to force exploiter to be checked, you can set minimum and maximum poits in Thaumaturge to 75. 
