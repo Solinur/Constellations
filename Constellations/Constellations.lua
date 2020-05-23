@@ -8,7 +8,7 @@ local pendata = {}
 Constellations = Constellations or {}
 local CST = Constellations
 CST.name 		= "Constellations"
-CST.version 	= "1.0.0"
+CST.version 	= "1.1.0"
 CST.debug = false or GetDisplayName() == "@Solinur"
 
 local function Print(message, ...)
@@ -99,7 +99,7 @@ end
 
 local resultRows
 local ritualLine = 5
-local ritualIds = {}
+local ritualCPIds = {}
 
 function Constellations.InitializeStarRows(control)
 
@@ -126,10 +126,14 @@ function Constellations.InitializeStarRows(control)
 			child.points = points
 			child.abilityId = abilityId
 
-			if discipline == ritualLine then ritualIds[abilityId] = true end -- gather Id's that count towards Exploiter passive
+			if discipline == ritualLine then ritualCPIds[abilityId] = true end -- gather Id's that count towards Exploiter passive
 
 			value:SetText(string.format("%d", points))
 			value:SetColor(colors.r, colors.g, colors.b, colors.a)
+
+			child:GetNamedChild("Value2"):SetColor(colors.r, colors.g, colors.b, colors.a)
+			child:GetNamedChild("Min"):SetColor(colors.r, colors.g, colors.b, colors.a)
+			child:GetNamedChild("Max"):SetColor(colors.r, colors.g, colors.b, colors.a)
 
 		elseif child:GetType() == CT_LABEL and discipline ~= nil then
 
@@ -227,8 +231,6 @@ function CST.SetSliderValue(self, value)
 
 end
 
-
-
 function CST.ApplyCurrentStarsButton(control)
 
 	PlaySound("Click")
@@ -238,6 +240,18 @@ function CST.ApplyCurrentStarsButton(control)
 	local crossTexture = control:GetNamedChild("Checked")
 
 	crossTexture:SetHidden(not CST.ApplyCurrentStars)
+
+end
+
+function CST.EnforceExploiterButton(control)
+
+	PlaySound("Click")
+
+	CST.EnforceExploiter = not CST.EnforceExploiter
+
+	local crossTexture = control:GetNamedChild("Checked")
+
+	crossTexture:SetHidden(not CST.EnforceExploiter)
 
 end
 
@@ -519,7 +533,7 @@ local function GetCPValue(abilityId, points, round)
 	return value
 end
 
-local function GetDamageFactor(stats, ratios, otherStats, CP, round)
+local function GetDamageFactor(stats, ratios, otherStats, CP, round, increaseId)
 
 	local cpfactors = {}
 
@@ -527,8 +541,10 @@ local function GetDamageFactor(stats, ratios, otherStats, CP, round)
 
 	for abilityId, value in pairs(CP) do
 
+		if abilityId == increaseId then value = value + 1 end
+
 		cpfactors[abilityId] = GetCPValue(abilityId, value, round)
-		if ritualIds[abilityId] then pointsInRitual = pointsInRitual + value end
+		if ritualCPIds[abilityId] then pointsInRitual = pointsInRitual + value end
 
 	end
 
@@ -734,9 +750,9 @@ local function ImportCMXData()
 	local weaponDamageTotal = 0
 
 
-	for id, ability in pairs(fightData.damageOut) do
+	for abilityId, ability in pairs(fightData.damageOut) do
 
-		local abilityCPData = AbilityData[id]
+		local abilityCPData = AbilityData[abilityId]
 		local abilityTotal = ability.damageOutTotal
 
 		local ismagic = IsMagickaAbility[ability.damageType]
@@ -792,8 +808,8 @@ local function ImportCMXData()
 
 			else
 
-				local name = GetAbilityName(id)
-				df("(%d) %s - No Data for this Ability!", id, name)
+				local name = GetAbilityName(abilityId)
+				df("(%d) %s - No Data for this Ability!", abilityId, name)
 			end
 		end
 	end
@@ -937,20 +953,26 @@ function CST.Calculate()
 
 	if CST.ApplyCurrentStars then AccountForPreviousCP(stats, ratios, otherStats, currentCP) end
 
-	local totalMinCP = 1
+	local EnforceExploiter = CST.EnforceExploiter
+
+	local totalMinCP = 0
 	local totalMaxCP = 0
+	local totalMinRitualCP = 0
 
-	local calcCP = {}
-	ZO_DeepTableCopy(minCP, calcCP)
+	local bestCP = ZO_ShallowTableCopy(minCP)
 
-	for id, value in pairs(minCP) do
+	for abilityId, min in pairs(minCP) do
 
-		totalMinCP = totalMinCP + value
-		totalMaxCP = totalMaxCP + maxCP[id]
+		local max = maxCP[abilityId]
+
+		if max < min then Print(GetString(SI_CONSTELLATIONS_ERROR_MINMAX)) return end
+
+		totalMinCP = totalMinCP + min
+		totalMaxCP = totalMaxCP + max
+
+		if ritualCPIds[abilityId] then totalMinRitualCP = totalMinRitualCP + min end
 
 	end
-
-	ZO_DeepTableCopy(calcCP, minCP)
 
 	local oldfactors = {GetDamageFactor(stats, ratios, otherStats, currentCP, true)}
 
@@ -959,55 +981,49 @@ function CST.Calculate()
 	CST.OldFactor:SetText(string.format(GetString(SI_CONSTELLATIONS_RESULT_LAYOUT_FACTOR), GetString(SI_CONSTELLATIONS_RESULT_OLD_FACTOR), oldfactors[1]))
 	CST.OldDPS:SetText(string.format(GetString(SI_CONSTELLATIONS_RESULT_LAYOUT_DPS), GetString(SI_CONSTELLATIONS_RESULT_OLD_DPS), currentDPS))
 
-	local totalCP = stats[STATS_TOTAL_MAGE_CP]
-	if totalMinCP > totalCP then return end
+	local totalAvailableCP = stats[STATS_TOTAL_MAGE_CP]
+	local maxCPValue = math.min(totalMaxCP, totalAvailableCP)
+	local remainingMinRitualCP = EnforceExploiter and math.max(0, 75 - totalMinRitualCP) or 0
 
-	local maxCPValue = math.min(totalMaxCP, totalCP)
+	if (totalMinCP - remainingMinRitualCP) > maxCPValue then Print(GetString(SI_CONSTELLATIONS_ERROR_TOOMUCHMIN)) return end
 
-	local grad = {}
-	local maxinc = 0
-	local totalmod
+	local maxDescentScore = 0
+	local score
 	local descfactors
 
 	-- Gradient Descent
 
-	for i = totalMinCP, maxCPValue do
+	for i = 1, maxCPValue - totalMinCP do
 
-		local oldmaxinc = maxinc
-		local maxKey = 0
+		local maxAbility
 
-		for abilityId, value in pairs(calcCP) do
+		for abilityId, value in pairs(bestCP) do
 
-			local cptemp = {}
+			if value < maxCP[abilityId] and (i > remainingMinRitualCP or (not EnforceExploiter) or ritualCPIds[abilityId]) then -- if EnforceExploiter and not enough points in ritual, only increase ritual CP
 
-			ZO_DeepTableCopy(calcCP, cptemp)
+				local factors = {GetDamageFactor(stats, ratios, otherStats, bestCP, false, abilityId)}
 
-			cptemp[abilityId] = value + 1
+				score = factors[1]
 
-			local factors = {GetDamageFactor(stats, ratios, otherStats, cptemp, false)}
-			totalmod = factors[1]
+				if score >= maxDescentScore then
 
-			if i == maxCP then grad[abilityId] = totalmod - oldmaxinc end
+					maxDescentScore = score
+					maxAbility = abilityId
+					descfactors = factors
 
-			if totalmod >= maxinc then
-				maxinc = totalmod
-				maxKey = abilityId
-				descfactors = factors
+				end
 			end
 		end
 
-		if maxKey == 0 then
-
-			Print("Calculation Error!")
-			return
-		end
-
-		calcCP[maxKey] = calcCP[maxKey] + 1
+		if maxAbility then bestCP[maxAbility] = bestCP[maxAbility] + 1 end
 	end
 
 	Print("Descent raw factor: %.6f (CP: %.6f, Crit: %.6f, Pen: %.6f)", unpack(descfactors))
 
-	-- Scan nearby JumpPoints
+	local descfactorsFloored = {GetDamageFactor(stats, ratios, otherStats, bestCP, true)}
+	Print("Descent lowered factor: %.6f (CP: %.6f, Crit: %.6f, Pen: %.6f)", unpack(descfactorsFloored))
+
+	-- Categorize stars for brute force optimization into those with and without jump points and those that can be ignored
 
 	local cpnear = {}
 
@@ -1016,58 +1032,69 @@ function CST.Calculate()
 	local noJPAbilityTable = {}
 	local IgnoredAbilityTable = {}
 
-	for id, value in pairs(CPData) do
+	local isAnyMagickaDamage = ratios[RATIOS_MAGICAL_DAMAGE] > 0
+	local isAnyStaminaDamage = ratios[RATIOS_PHYSICAL_DAMAGE] > 0
 
-		JumpPointTable[id] = JumpPoints[value.type]
+	for abilityId, value in pairs(CPData) do
 
-		if value.type == STARTYPE_5280 and ((value.attribute == ATTRIBUTE_MAGICKA and ratios[RATIOS_MAGICAL_DAMAGE] > 0) or (value.attribute == ATTRIBUTE_STAMINA and ratios[RATIOS_PHYSICAL_DAMAGE] > 0) or value.attribute == ATTRIBUTE_NONE) then
+		JumpPointTable[abilityId] = JumpPoints[value.type]
 
-			noJPAbilityTable[#noJPAbilityTable + 1] = id
+		local attribute = value.attribute
 
-		elseif (value.attribute == ATTRIBUTE_MAGICKA and ratios[RATIOS_MAGICAL_DAMAGE] > 0) or (value.attribute == ATTRIBUTE_STAMINA and ratios[RATIOS_PHYSICAL_DAMAGE] > 0) or value.attribute == ATTRIBUTE_NONE then
+		local isValid = (attribute == ATTRIBUTE_MAGICKA and isAnyMagickaDamage) or (attribute == ATTRIBUTE_STAMINA and isAnyStaminaDamage) or attribute == ATTRIBUTE_NONE
 
-			JPAbilityTable[#JPAbilityTable + 1] = id
+		if value.type == STARTYPE_5280 and isValid then
+
+			noJPAbilityTable[#noJPAbilityTable + 1] = abilityId
+
+		elseif isValid then
+
+			JPAbilityTable[#JPAbilityTable + 1] = abilityId
 
 		else
 
-			IgnoredAbilityTable[#IgnoredAbilityTable + 1] = id
+			IgnoredAbilityTable[#IgnoredAbilityTable + 1] = abilityId
 
 		end
 
 	end
 
-	for id, jumpPoints in pairs(JumpPointTable) do
+	-- Look for nearby JumpPoints
+
+	for abilityId, jumpPoints in pairs(JumpPointTable) do
 
 		local mindist = 100
 
-		cpnear[id] = {minCP[id], math.floor((minCP[id] + maxCP[id]) / 2), maxCP[id]} -- in case no jumppoint is between min and max
+		local min = minCP[abilityId]
+		local best = bestCP[abilityId]
+		local max = maxCP[abilityId]
+
+		cpnear[abilityId] = {min, nil, max} -- in case no jumppoint is between min and max
 
 		for i, jp in ipairs(jumpPoints) do
 
-			if math.abs(jp - calcCP[id]) < mindist and jp <= maxCP[id] and jp >= minCP[id] then
-				mindist = math.abs(jp - calcCP[id])
+			local dist = math.abs(jp - best)
 
-				local cpminus = jumpPoints[i - 1] or 0
-				local cpnearest = jp
-				local cpplus = jumpPoints[i + 1] or 100
+			if dist < mindist and (min < jp) and (jp < max) then
 
-				local low = cpminus >= minCP[id] and cpminus or cpnearest
-				local high = cpplus <= maxCP[id] and cpplus or cpnearest
+				mindist = dist
 
-				cpnear[id] = {low, cpnearest, high}
+				local jpLower = math.max(jumpPoints[i - 1] or 0, min)
+				local jpNearest = jp
+				local jpUpper = math.min(jumpPoints[i + 1] or 100, max)
+
+				cpnear[abilityId][1] = jpLower
+				cpnear[abilityId][2] = jpNearest
+				cpnear[abilityId][3] = jpUpper
 			end
 		end
-
 	end
 
-	local descfactors = {GetDamageFactor(stats, ratios, otherStats, calcCP, true)}
-	local maxincjp = 0
+	local maxTotalScore = descfactorsFloored[1]
 
-	Print("Descent lowered factor: %.6f (CP: %.6f, Crit: %.6f, Pen: %.6f)", unpack(descfactors))
+	local iterations = math.pow(3, #JPAbilityTable)
 
-	local iterations = math.pow(3, #JPAbilityTable) - 1
-
-	local div = {}
+	local div = {}	-- deviders to pick corresponding CP set when iterating over all options
 
 	for i = 1, #JPAbilityTable do
 
@@ -1075,75 +1102,134 @@ function CST.Calculate()
 
 	end
 
+	local cptemp = {}
+	local minFlex = 0
+	local maxFlex = 0
+	local nonJPMin = 0
+
+	for _, abilityId in ipairs(IgnoredAbilityTable) do
+
+		cptemp[abilityId] = minCP[abilityId]
+		nonJPMin = nonJPMin + minCP[abilityId]
+
+	end
+
+	for _, abilityId in ipairs(noJPAbilityTable) do
+
+		cptemp[abilityId] = minCP[abilityId]
+		minFlex = minFlex + minCP[abilityId]
+		maxFlex = maxFlex + maxCP[abilityId]
+
+	end
+
 	-- Check all nearby JumpPoints
 
-	for i = 0, iterations do
+	for i = 0, iterations - 1 do
 
-		local cptemp = {}
+		local usedCP = nonJPMin + minFlex
+		local validSet = true
+		local ritualCPSum = 0
 
-		local totalCP = 0
+		for k, abilityId in ipairs(JPAbilityTable) do -- generate CP set
 
-		for k, id in ipairs(JPAbilityTable) do
+			local directionIndex = math.floor(i / div[k])%3 + 1 -- selects if low, nearest, high
 
-			local value = cpnear[id][math.floor(i / div[k])%3 + 1]
-			cptemp[id] = value
-			totalCP = totalCP + value
+			local value = cpnear[abilityId][directionIndex]
+
+			if value == nil or value > maxCP[abilityId] then
+
+				validSet = false
+				break
+
+			else
+
+				cptemp[abilityId] = value
+				usedCP = usedCP + (value or 0)
+
+			end
+		end
+
+		for abilityId, value in pairs(ritualCPIds) do
+
+			ritualCPSum = ritualCPSum + cptemp[abilityId]
 
 		end
 
-		if totalCP <= maxCPValue then
+		local remainingCP = maxCPValue - usedCP
+		local cptemp2 = ZO_ShallowTableCopy(cptemp)
 
-			for k, id in ipairs(IgnoredAbilityTable) do
+		if EnforceExploiter and (75 - ritualCPSum) > remainingCP then
 
-				cptemp[id] = 0
+			validSet = false
 
-			end
+		elseif EnforceExploiter and validSet and (75 - ritualCPSum) > 0 then
 
-			for k, id in ipairs(noJPAbilityTable) do
+			local pointsToAdd = (75 - ritualCPSum)
 
-				cptemp[id] = 0
+			cptemp2[PIERCING] = cptemp2[PIERCING] + pointsToAdd
+			remainingCP = remainingCP - pointsToAdd
 
-			end
+		end
 
-			local maxincjp2 = GetDamageFactor(stats, ratios, otherStats, cptemp, true)
+		if validSet and remainingCP > 0 then
 
-			local CPremain = maxCPValue - totalCP
+			local score = GetDamageFactor(stats, ratios, otherStats, cptemp2, true)
 
-			for i = totalCP, maxCPValue - 1 do
+			-- for now there are only 2 stars without jumppoints, so keep it simple
 
-				local maxKey = noJPAbilityTable[1]
+			local finishedAbilities = {}
 
-				for i, abilityId in pairs(noJPAbilityTable) do
+			for i = 1, remainingCP do
 
-					local cptemp2 = {}
+				local maxAbility
+				local currentscore = score
 
-					ZO_DeepTableCopy(cptemp, cptemp2)
+				for _, abilityId in pairs(noJPAbilityTable) do
 
-					cptemp2[abilityId] = cptemp2[abilityId] + 1
+					if cptemp2[abilityId] >= maxCP[abilityId] then
 
-					totalmod = GetDamageFactor(stats, ratios, otherStats, cptemp2, true)
+						finishedAbilities[abilityId] = true
 
-					if totalmod >= maxincjp2 then
-						maxincjp2 = totalmod
-						maxKey = abilityId
+					elseif not finishedAbilities[abilityId] then
+
+						local newscore = GetDamageFactor(stats, ratios, otherStats, cptemp2, true, abilityId)
+
+						if newscore <= currentscore then
+
+							finishedAbilities[abilityId] = true
+
+						elseif newscore > score then
+							score = newscore
+							maxAbility = abilityId
+						end
 					end
 				end
 
-				cptemp[maxKey] = cptemp[maxKey] + 1
+				if maxAbility then cptemp2[maxAbility] = cptemp2[maxAbility] + 1 else break end
 			end
 
-			if maxincjp2 >= maxincjp then
+			if score > maxTotalScore then
 
-				maxincjp = maxincjp2
-				calcCP = cptemp
+				maxTotalScore = score
+				bestCP = cptemp2
+
 			end
 		end
 	end
 
-	SetNewStarValues(calcCP)
+	local CPsum = 0
 
-	local newfactors = {GetDamageFactor(stats, ratios, otherStats, calcCP, true)}
+	for _, value in pairs(bestCP) do
+
+		CPsum = CPsum + value
+
+	end
+
+	SetNewStarValues(bestCP)
+
+	local newfactors = {GetDamageFactor(stats, ratios, otherStats, bestCP, true)}
 	Print("Final factor: %.6f (CP: %.6f, Crit: %.6f, Pen: %.6f)", unpack(newfactors))
+	Print("Total CP used: %d", CPsum)
 
 	local resultratio = newfactors[1] / oldfactors[1]
 	local improvement = resultratio - 1
@@ -1162,6 +1248,18 @@ function CST.Calculate()
 	CST.MainResult:SetColor(unpack(resultcolor))
 	CST.NewDPS:SetColor(unpack(resultcolor))
 	CST.NewFactor:SetColor(unpack(resultcolor))
+
+	if CPsum ~= maxCPValue then
+
+		local left = maxCPValue - CPsum
+		CST.UnusedCP:SetText(zo_strformat(GetString(SI_CONSTELLATIONS_RESULT_UNUSED_CP), left))
+		CST.UnusedCP:SetHidden(false)
+
+	else
+
+		CST.UnusedCP:SetHidden(true)
+
+	end
 end
 
 local svdefaults = {

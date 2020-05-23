@@ -118,3 +118,11 @@
 [*] When one of the investigated CP combinations fulfills requirements for the exploiter passive, it will now be attributed with the appropriate result that includes the (averaged) damage bonus. 
 [*] The uptime of the required Off-Balance buff will be read from the imported data but can also be set on the first page. Default is the current maximum uptime. Keep in mind  that in order to precisely attribute the effect, a reasonable estimation of "Damage Bonus %" on the first page is required. 
 [*] In order to force exploiter to be checked, you can set minimum and maximum poits in Thaumaturge to 75. 
+
+1.1.0 DL: 166,940 (21.05.2020) 18:39
+[*] Did some improvements to the optimization routine, which should now get a result faster.
+[*] In some cases not all CP are used (the result is still good), which will be displayed below the results.
+[*] Added a toggle to enforce the "Exploiter" passive of the Ritual constellation. Use this to see if a better result with Exploiter can be obtained. 
+[*] Minimum/Maximum values of Spell Erosion and Piercing should now be followed, the only exception is when points for Exploiter are required.  
+[*] Updated Vampire and Werewolf abilities.
+[*] Added a few Synergy abilities, based on best guesses (Don't want to bother anyone testing this with me, since those abilities are usually barely relevant in the overall damage composition).

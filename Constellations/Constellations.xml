@@ -633,34 +633,76 @@
 								</Control>
 
 								<Control name="$(parent)ApplyCurrentStars" mouseEnabled="true" resizeToFitDescendents="true">
+
 									<Anchor point="LEFT" relativeTo="Constellations_Calculate" relativePoint="LEFT" offsetX="20" constrains="X" />
 									<Anchor point="TOP" relativeTo="$(parent)ButtonRow" relativePoint="BOTTOM" offsetY="12" constrains="Y" />
-
 									<Dimensions x="458" y="20" />
+
 									<Controls>
 										<Button name="$(parent)Box">
 											<Anchor point="TOPLEFT" relativePoint="TOPLEFT" />
 											<Dimensions x="20" y="20" />
-											<OnMouseUp>Constellations.ApplyCurrentStarsButton(self:GetParent())</OnMouseUp>
+
 											<Textures normal="esoui/art/buttons/swatchframe_down.dds" />
+
+											<OnMouseUp>Constellations.ApplyCurrentStarsButton(self:GetParent())</OnMouseUp>
 										</Button>
+
 										<Button name="$(parent)Checked">
 											<Anchor point="TOPLEFT" relativeTo="$(parent)Box" />
 											<Anchor point="BOTTOMRIGHT" relativeTo="$(parent)Box" />
+
 											<OnMouseUp>Constellations.ApplyCurrentStarsButton(self:GetParent())</OnMouseUp>
 											<OnInitialized>	Constellations.ApplyCurrentStarsCheckBox = self </OnInitialized>
-											<Textures normal="esoui/art/buttons/decline_up.dds" />
+
+											<Textures normal="esoui/art/buttons/decline_up.dds"/>
 										</Button>
+
 										<Label name="$(parent)Label" mouseEnabled="true" font="Constellations_OptionFont" color="FFFFFFFF" text="SI_CONSTELLATIONS_RESULT_ACCOUNTOLDCP">
 											<Anchor point="LEFT" relativeTo="$(parent)Box" relativePoint="RIGHT" offsetX="8" offsetY="0" />
+
 											<OnMouseUp>Constellations.ApplyCurrentStarsButton(self:GetParent())</OnMouseUp>
 										</Label>
 
 									</Controls>
 								</Control>
 
+								<Control name="$(parent)EnforceExploiter" mouseEnabled="true" resizeToFitDescendents="true">
+									
+									<Anchor point="LEFT" relativeTo="Constellations_Calculate" relativePoint="LEFT" offsetX="20" constrains="X" />
+									<Anchor point="TOP" relativeTo="$(parent)ApplyCurrentStars" relativePoint="BOTTOM" offsetY="12" constrains="Y" />
+									<Dimensions x="458" y="20" />
+
+									<Controls>
+										<Button name="$(parent)Box">
+											<Anchor point="TOPLEFT" relativePoint="TOPLEFT" />
+											<Dimensions x="20" y="20" />
+
+											<Textures normal="esoui/art/buttons/swatchframe_down.dds" />
+
+											<OnMouseUp>Constellations.EnforceExploiterButton(self:GetParent())</OnMouseUp>
+										</Button>
+										
+										<Button name="$(parent)Checked">
+											<Anchor point="TOPLEFT" relativeTo="$(parent)Box" />
+											<Anchor point="BOTTOMRIGHT" relativeTo="$(parent)Box" />
+
+											<OnMouseUp>Constellations.EnforceExploiterButton(self:GetParent())</OnMouseUp>
+
+											<Textures normal="esoui/art/buttons/decline_up.dds"/>
+										</Button>
+
+										<Label name="$(parent)Label" mouseEnabled="true" font="Constellations_OptionFont" color="FFFFFFFF" text="SI_CONSTELLATIONS_RESULT_ENFORCE_EXPLOITER">
+											<Anchor point="LEFT" relativeTo="$(parent)Box" relativePoint="RIGHT" offsetX="8" offsetY="0" />
+
+											<OnMouseUp>Constellations.EnforceExploiterButton(self:GetParent())</OnMouseUp>
+										</Label>
+
+									</Controls>
+								</Control>
+
 								<Label name="$(parent)MainResult" mouseEnabled="true" font="Constellations_ResultFont" color="FFFFFFFF" horizontalAlignment="CENTER" text="SI_CONSTELLATIONS_RESULT_LAXOUT_NEUTRAL">
-									<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$(parent)ApplyCurrentStars" offsetY="12" constrains="Y" />
+									<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$(parent)EnforceExploiter" offsetY="12" constrains="Y" />
 									<Anchor point="CENTER" relativeTo="Constellations_Calculate" relativePoint="CENTER" constrains="X" />
 									<Dimensions y="34" />
 									<OnInitialized>	Constellations.MainResult = self </OnInitialized>
@@ -697,13 +739,13 @@
 									
 									<Controls>
 
-										<Label name="$(parent)LabelBefore" mouseEnabled="true" font="Constellations_OptionFont" color="FFFFFFFF" text="">
+										<Label name="$(parent)LabelBefore" font="Constellations_OptionFont" color="FFFFFFFF" text="">
 											<Anchor point="LEFT" relativePoint="LEFT" offsetX="14" offsetY="0" />
 											<Dimensions x="200" y="24" />
 											<OnInitialized>	Constellations.OldFactor = self </OnInitialized>
 										</Label>
 
-										<Label name="$(parent)LabelNew" mouseEnabled="true" font="Constellations_OptionFont" color="FFFFFFFF" text="">
+										<Label name="$(parent)LabelNew" font="Constellations_OptionFont" color="FFFFFFFF" text="">
 											<Anchor point="LEFT" relativePoint="CENTER" offsetX="15" offsetY="0" />
 											<Dimensions x="200" y="24" />
 											<OnInitialized>	Constellations.NewFactor = self </OnInitialized>
@@ -712,6 +754,15 @@
 									</Controls>
 								</Control>
 
+								<Label name="$(parent)UnusedCPLabel" font="Constellations_OptionFont" color="FFFFAAAA" text="" horizontalAlignment="CENTER" hidden="true">
+
+									<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$(parent)FactorRow" offsetY="12" constrains="Y" />
+									<Anchor point="CENTER" relativePoint="CENTER" constrains="X" />
+									<Dimensions x="458" y="24" />
+
+									<OnInitialized>	Constellations.UnusedCP = self </OnInitialized>
+
+								</Label>
 							</Controls>
 						</Control>
 

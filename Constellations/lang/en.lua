@@ -76,6 +76,7 @@ local strings = {
     SI_CONSTELLATIONS_RESULT_RESETCP = "Reset old CP",
     SI_CONSTELLATIONS_BUTTON_CALCULATE = "Calculate",
     SI_CONSTELLATIONS_RESULT_ACCOUNTOLDCP = "Account for old Champion Points",
+    SI_CONSTELLATIONS_RESULT_ENFORCE_EXPLOITER = "Enforce Exploiter passive",
 
     SI_CONSTELLATIONS_RESULT_OLD_DPS = "Old DPS: ",
     SI_CONSTELLATIONS_RESULT_NEW_DPS = "New DPS: ",
@@ -84,6 +85,11 @@ local strings = {
     SI_CONSTELLATIONS_RESULT_OLD_FACTOR = "Old factor: ",
     SI_CONSTELLATIONS_RESULT_NEW_FACTOR = "New factor: ",
     SI_CONSTELLATIONS_RESULT_LAYOUT_FACTOR = "%s%.5f",
+
+    SI_CONSTELLATIONS_RESULT_UNUSED_CP = "<<1>> CP were not used.",
+
+    SI_CONSTELLATIONS_ERROR_TOOMUCHMIN = "Your minimum requirements exceed the available CP.",
+    SI_CONSTELLATIONS_ERROR_MINMAX = "You set a minimum larger than the corresponding maximum.",
 }
 
 for stringId, stringValue in pairs(strings) do
