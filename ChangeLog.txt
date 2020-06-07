@@ -126,3 +126,6 @@
 [*] Minimum/Maximum values of Spell Erosion and Piercing should now be followed, the only exception is when points for Exploiter are required.  
 [*] Updated Vampire and Werewolf abilities for Greymoor.
 [*] Added a few Synergy abilities, based on best guesses (Don't want to bother anyone testing this with me, since those abilities are usually barely relevant in the overall damage composition).
+
+1.1.1 DL: 179.708 (07.06.2020) 23:20
+[*] Added missing abilities: Puncturing Sweeps (thx @ daydreamr) and Stone Giant (thx @ migueltorres).
