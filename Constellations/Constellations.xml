@@ -388,7 +388,7 @@
 									<Anchor point="TOPLEFT" relativeTo="$(parent)Input1" relativePoint="BOTTOMLEFT" offsetY="4" />
 									<OnInitialized>
 										self.color = SI_CONSTELLATIONS_COLOR_NEUTRAL
-										self.minmax = {0, 100000, 1}
+										self.minmax = {0, 200000, 1}
 										self.id = 2
 									</OnInitialized>
 								</Control>
