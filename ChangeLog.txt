@@ -129,3 +129,10 @@
 
 1.1.1 DL: 179.708 (07.06.2020) 23:20
 [*] Added missing abilities: Puncturing Sweeps (thx @ daydreamr) and Stone Giant (thx @ migueltorres).
+
+1.1.2 DL: 189.516 (10.07.2020) 23:04
+[*] Added missing data for Force Pulse (splash effect) and Flying Blade (second hit).
+[*] Increased DPS slider range to 200k. 
+
+1.1.3 DL: 200.365 (20.08.2020) 21:06
+[*] API Bump to Stonethorn (100032)
