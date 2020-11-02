@@ -139,3 +139,6 @@
 
 1.1.4 DL: 207.813 (30.08.2020) 17:30
 [*] Added some missing data. (Thx to dhomhnuill and justme for reporting them)
+
+1.1.5 DL: 219.812 (03.11.2020) 00:08
+[*] API Bump to Markarth (100032)
