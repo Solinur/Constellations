@@ -142,3 +142,6 @@
 
 1.1.5 DL: 219.812 (03.11.2020) 00:08
 [*] API Bump to Markarth (100032)
+
+1.1.6 DL: 228.141 (16.11.2020) 01:55
+[*] Added a few missing abilities. Thx to yzanas and dg00des for the reports.
